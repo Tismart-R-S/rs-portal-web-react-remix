@@ -64,6 +64,9 @@ export default {
           '5': 'hsl(var(--chart-5))',
         },
       },
+      screens: {
+        'h-sm': { raw: '(min-height: 600px)' },
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
