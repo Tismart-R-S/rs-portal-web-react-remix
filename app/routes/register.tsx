@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/card';
-import CenterContent from '@components/CenterContent';
+import { CenterContent } from '@shared/components';
 
 export const meta: MetaFunction = () => {
   return [

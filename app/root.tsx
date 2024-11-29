@@ -9,7 +9,7 @@ import type { LinksFunction } from '@remix-run/node';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import './tailwind.css';
-import Header from '@layouts/Header';
+import { Header } from '@shared/layouts';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
