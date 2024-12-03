@@ -17,6 +17,11 @@ export enum LocalStorageKeys {
   user = 'user',
 }
 
+//* Keys de Strategy
+export enum StrategyKeys {
+  auth = 'auth-strategy',
+}
+
 //* Keys de Cookies
 export enum CookieKeys {
   user = 'user',

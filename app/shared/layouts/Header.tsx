@@ -2,10 +2,10 @@ import { Link } from '@remix-run/react';
 
 import { Button } from '@ui/button';
 import { ProfileButtons, CommonButtons } from './components';
+import { HeaderProps } from './layout-props.interface';
+import { UserResponseModel } from '@data/models/user.model';
 
-const Header = () => {
-  const session = true;
-
+const Header = ({ user }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border">
       <div className="flex justify-between items-center px-4 py-3 max-w-[1536px] xl:mx-auto">
@@ -16,7 +16,7 @@ const Header = () => {
           <Button asChild variant="ghost">
             <Link to="/">Vacantes</Link>
           </Button>
-          {session ? <ProfileButtons /> : <CommonButtons />}
+          {user ? <ProfileButtons user={user} /> : <CommonButtons />}
         </div>
       </div>
     </header>

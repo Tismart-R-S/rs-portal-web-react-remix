@@ -4,12 +4,19 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from '@remix-run/react';
-import type { LinksFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { redirect, data } from '@remix-run/node';
+import { destroySession, getSession } from '@lib/auth/storage.server';
 
 import './tailwind.css';
 import { Header } from '@shared/layouts';
+import getUserUseCase from './data/usecases/user/get-user.usecase';
+import { UserResponseModel } from '@data/models/user.model';
+import { RootLogic } from './modules/index/logic/root.logic';
+import { SessionProvider } from './providers/session.provider';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -27,6 +34,8 @@ export const links: LinksFunction = () => [
 const queryClient = new QueryClient();
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const loaderData = useLoaderData<typeof loader>();
+
   return (
     <html lang="es">
       <head>
@@ -36,7 +45,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Header />
+        <Header user={loaderData.data} />
         <main className="max-w-5xl mx-auto py-10 px-4">{children}</main>
         <ScrollRestoration />
         <Scripts />
@@ -51,4 +60,12 @@ export default function App() {
       <Outlet />
     </QueryClientProvider>
   );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const user = await RootLogic.userData(request);
+
+  console.log({ user });
+
+  return data(user);
 }

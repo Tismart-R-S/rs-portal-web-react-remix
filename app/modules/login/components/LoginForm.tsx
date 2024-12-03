@@ -1,3 +1,4 @@
+import { Form } from '@remix-run/react';
 import { Facebook, Mail } from 'lucide-react';
 
 import { Button } from '@ui/button';
@@ -7,16 +8,26 @@ import { CardContent, CardFooter } from '@ui/card';
 
 const LoginForm = () => {
   return (
-    <form>
+    <Form method="post">
       <CardContent className="pb-10">
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="user">Correo o Documento de identidad</Label>
-            <Input id="user" placeholder="abc@xyz.com o 12345678" />
+            <Label htmlFor="email">Correo elctrónico</Label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="abc@xyz.com"
+            />
           </div>
           <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="passw">Contraseña</Label>
-            <Input type="password" id="passw" placeholder="••••••••" />
+            <Label htmlFor="password">Contraseña</Label>
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+            />
           </div>
         </div>
       </CardContent>
@@ -29,17 +40,21 @@ const LoginForm = () => {
           <hr className="w-3/4" />
         </div>
         <div className="flex justify-between gap-3 w-full">
-          <Button variant="outline" className="w-full">
+          <Button type="button" variant="outline" className="w-full">
             <Mail /> Google
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button type="button" variant="outline" className="w-full">
             <Facebook /> Facebook
           </Button>
         </div>
-        <Button className="w-full">Ingresar</Button>
-        <Button variant="link">¿Olvidaste tu contraseña?</Button>
+        <Button type="submit" className="w-full">
+          Ingresar
+        </Button>
+        <Button type="button" variant="link">
+          ¿Olvidaste tu contraseña?
+        </Button>
       </CardFooter>
-    </form>
+    </Form>
   );
 };
 
