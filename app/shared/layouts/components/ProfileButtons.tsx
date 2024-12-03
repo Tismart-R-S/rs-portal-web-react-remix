@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import { Form, Link } from '@remix-run/react';
 import { LogOut } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
+import { ProfileButtonsProps } from '../layout-props.interface';
 
 const ProfileButtons = ({ user }: ProfileButtonsProps) => {
   return (
