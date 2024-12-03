@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { LogOut } from "lucide-react";
+import { LogOut, UserRound } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
 import { Button } from "@ui/button";
@@ -16,21 +16,24 @@ const ProfileButtons = () => {
   return (
     <>
       <div className="flex gap-3">
-        <div>
-          <h5 className="font-semibold text-sm">Pepita Juárez</h5>
-          <p className="text-muted-foreground text-xs">Postulante</p>
-        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-              <Avatar className="w-9 h-9">
+            <div className="flex gap-4 cursor-pointer">
+              <div>
+                <h5 className="font-semibold text-sm">Pepita Juárez</h5>
+                <p className="text-muted-foreground text-xs">Postulante</p>
+              </div>
+              <Avatar className="w-9 h-9 bg-gray-100 flex">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  className="w-6 m-auto"
+                  src="" // Cuando los perfiles estén disponibles se deberá colocar la url del perfil
                   alt="@username"
-                />
-                <AvatarFallback>CN</AvatarFallback>
+                ></AvatarImage>
+                <AvatarFallback>
+                  <UserRound />
+                </AvatarFallback>
               </Avatar>
-            </Button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
@@ -43,7 +46,14 @@ const ProfileButtons = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to="/profile" className="cursor-pointer">Profile</Link>
+              <Link to="/profile" className="cursor-pointer">
+                Mi perfil
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/postulation-data" className="cursor-pointer">
+                Mis datos de postulación
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
