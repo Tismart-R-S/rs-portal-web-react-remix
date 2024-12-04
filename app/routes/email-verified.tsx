@@ -1,5 +1,6 @@
-import type { MetaFunction } from '@remix-run/node';
+import { data, LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
 
+import EmailVerifiedLogic from '@modules/email-verified/logic/email-verified.logic';
 import { CenterContent } from '@shared/components';
 import { Button } from '@ui/button';
 
@@ -38,4 +39,10 @@ export default function EmailVerified() {
       </div>
     </CenterContent>
   );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  EmailVerifiedLogic.verifyShowPage(request);
+
+  return data({});
 }
