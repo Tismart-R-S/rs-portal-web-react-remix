@@ -1,9 +1,8 @@
-import { Link } from '@remix-run/react';
+import { Link } from "@remix-run/react";
 
-import { Button } from '@ui/button';
-import { ProfileButtons, CommonButtons } from './components';
-import { HeaderProps } from './layout-props.interface';
-import { UserResponseModel } from '@data/models/user.model';
+import { Button } from "@ui/button";
+import { ProfileButtons, CommonButtons } from "./components";
+import { HeaderProps } from "./layout-props.interface";
 
 const Header = ({ user }: HeaderProps) => {
   return (
@@ -24,3 +23,4 @@ const Header = ({ user }: HeaderProps) => {
 };
 
 export default Header;
+

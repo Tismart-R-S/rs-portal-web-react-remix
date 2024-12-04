@@ -67,6 +67,8 @@ module.exports = {
         },
       },
       rules: {
+        "react/prop-types": "off",
+        "react/no-unknown-property": "off",
         "@typescript-eslint/no-namespace": "off",
       },
       extends: [

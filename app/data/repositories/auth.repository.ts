@@ -9,7 +9,7 @@ namespace AuthRepository {
 
     try {
       response = await AuthApiAdapter.login(data);
-    } catch (error: any) {
+    } catch (error) {
       response = RepositoryUtils.responseError(error);
     }
 
@@ -21,7 +21,7 @@ namespace AuthRepository {
 
     try {
       response = await AuthApiAdapter.refreshToken(refresh_token);
-    } catch (error: any) {
+    } catch (error) {
       response = RepositoryUtils.responseError(error);
     }
 

@@ -8,7 +8,7 @@ namespace UserRepository {
 
     try {
       response = await UserApiAdapter.getData(token);
-    } catch (error: any) {
+    } catch (error) {
       response = RepositoryUtils.responseError(error);
     }
 
