@@ -1,8 +1,15 @@
-import { data, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  data,
+  LoaderFunctionArgs,
+  type MetaFunction,
+} from "@remix-run/node";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 
 import EmailVerifiedLogic from "@modules/email-verified/logic/email-verified.logic";
 import { CenterContent } from "@shared/components";
 import { Button } from "@ui/button";
+import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -12,6 +19,35 @@ export const meta: MetaFunction = () => {
 };
 
 export default function EmailVerified() {
+  const loaderData = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
+
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (actionData?.message) {
+      setMessage(actionData.message);
+
+      // Ocultar el mensaje después de 5 segundos
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 5000);
+
+      return () => clearTimeout(timer); // Limpiar el temporizador
+    }
+
+    if (loaderData?.message) {
+      setMessage(loaderData.message);
+
+      // Ocultar el mensaje después de 5 segundos
+      const timer = setTimeout(() => {
+        setMessage("");
+      }, 5000);
+
+      return () => clearTimeout(timer); // Limpiar el temporizador
+    }
+  }, [actionData, loaderData]);
+
   return (
     <CenterContent>
       <div>
@@ -33,8 +69,11 @@ export default function EmailVerified() {
             botón de abajo para reenviar el correo de verificación.
           </p>
           <div className="flex justify-center my-6">
-            <Button className="mx-auto">Reenviar correo</Button>
+            <Form method="post">
+              <Button className="mx-auto">Reenviar correo</Button>
+            </Form>
           </div>
+          {message && <p>{message}</p>}
         </div>
       </div>
     </CenterContent>
@@ -44,5 +83,19 @@ export default function EmailVerified() {
 export async function loader({ request }: LoaderFunctionArgs) {
   await EmailVerifiedLogic.verifyShowPage(request);
 
-  return data({});
+  const params = new URL(request.url).searchParams;
+  const token = params.get("token");
+
+  if (token) {
+    const response = await EmailVerifiedLogic.verifyEmailToken(request, token);
+    return data(response);
+  }
+
+  return data(null);
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const response = await EmailVerifiedLogic.resendVerificationEmail(request);
+  console.log({ response });
+  return data(response);
 }

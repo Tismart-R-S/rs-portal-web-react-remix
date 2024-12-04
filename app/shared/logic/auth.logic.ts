@@ -2,12 +2,12 @@ import { BaseResponse } from "@data/interfaces/global.interface";
 import refreshTokenUseCase from "@data/usecases/auth/refresh-token.usecase";
 import { SessionProvider } from "@providers/session.provider";
 import { SessionLogic } from "./session.logic";
-import { RefreshTokenResponseModel } from "@data/models/refres-token.model";
+import { RefreshTokenResponseModel } from "@data/models/refresh-token.model";
 
 namespace AuthLogic {
   interface AuthUseCaseResponse<T> {
     ok: boolean;
-    data: T | null;
+    data: T;
   }
 
   export const refreshSessionToken = async (cookie: string, route: string) => {
@@ -38,7 +38,8 @@ namespace AuthLogic {
     console.log("------executeUseCase------");
     console.log({ response });
 
-    if (response.statusCode === 403) await refreshSessionToken(cookie, route);
+    if (response.statusCode === 403 || response.statusCode === 401)
+      await refreshSessionToken(cookie, route);
 
     const { data, ok } = response;
 

@@ -17,6 +17,8 @@ export namespace SessionLogic {
 
   export const authenticate = async (cookie: string, route = "/") => {
     const session = await SessionProvider.get(cookie);
+    console.log("------authenticate------");
+    console.log({ session });
     const { isAuthenticated } = session;
 
     if (isAuthenticated) throw redirect(route);
@@ -36,6 +38,17 @@ export namespace SessionLogic {
     route = "/"
   ) => {
     const session = await SessionProvider.saveToken(cookie, token);
+
+    throw redirect(route, { headers: { "Set-Cookie": session } });
+  };
+
+  export const save = async <T>(
+    cookie: string,
+    label: string,
+    value: T,
+    route = "/"
+  ) => {
+    const session = await SessionProvider.saveByLabel<T>(cookie, label, value);
 
     throw redirect(route, { headers: { "Set-Cookie": session } });
   };

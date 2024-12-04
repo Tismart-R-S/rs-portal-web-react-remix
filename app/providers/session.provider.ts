@@ -35,6 +35,18 @@ export namespace SessionProvider {
     return await commitSession(session);
   };
 
+  export const saveByLabel = async <T>(
+    cookie: string,
+    label: string,
+    value: T
+  ) => {
+    console.log("------saveByLabel------");
+    console.log({ label, value });
+    const session = await getSession(cookie);
+    session.set(label, value);
+    return await commitSession(session);
+  };
+
   export const get = async (cookie: string): Promise<SessionDataResponse> => {
     const session = await getSession(cookie);
     const token: string = session.get("token") || "";

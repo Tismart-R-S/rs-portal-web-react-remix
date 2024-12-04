@@ -41,7 +41,7 @@ const ProfileButtons = ({ user }: ProfileButtonsProps) => {
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">email</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  user@example.com
+                  {user.email}
                 </p>
               </div>
             </DropdownMenuLabel>

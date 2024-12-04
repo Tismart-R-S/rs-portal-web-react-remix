@@ -10,8 +10,8 @@ export namespace LoginLogic {
 
     if (!login.ok) return login.data as string[];
 
-    const access = login.data as LoginResponseModel;
     const cookie = request.headers.get("cookie") || "";
+    const access = login.data as LoginResponseModel;
     const user = await UserLogic.getDataCommonWay(access.accessToken);
 
     await SessionLogic.logIn(cookie, { ...access, user });

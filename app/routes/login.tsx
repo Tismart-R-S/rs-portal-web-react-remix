@@ -38,6 +38,7 @@ export default function Login() {
 
 export async function action({ request }: ActionFunctionArgs) {
   const loginErrors = await LoginLogic.login(request);
+  console.log({ loginErrors });
   return data(loginErrors);
 }
 
