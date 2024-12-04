@@ -1,7 +1,7 @@
-import { ArrowUpRight, FilePlus, TriangleAlert } from 'lucide-react';
-import { Link } from '@remix-run/react';
+import { ArrowUpRight, FilePlus, TriangleAlert } from "lucide-react";
+import { Link } from "@remix-run/react";
 
-import { Button } from '@ui/button';
+import { Button } from "@ui/button";
 
 const ApplicationSentButton = () => {
   return (
@@ -11,7 +11,7 @@ const ApplicationSentButton = () => {
   );
 };
 
-const ApplicationButton = ({ errors = false }) => {
+const ApplicationButton = ({ errors = false }: { errors?: boolean }) => {
   return (
     <Button disabled={errors}>
       Postularse <ArrowUpRight />

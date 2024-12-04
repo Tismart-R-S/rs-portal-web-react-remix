@@ -6,7 +6,7 @@ namespace EmailVerifiedLogic {
     const cookie = request.headers.get('cookie') || '';
     const user = await SessionProvider.getByLabel(cookie, 'user');
 
-    if (!user || user?.isVerified === true) throw redirect('/');
+    if (!user || user?.isVerified === true) return redirect('/');
   };
 }
 

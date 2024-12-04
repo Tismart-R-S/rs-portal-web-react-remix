@@ -2,27 +2,25 @@ import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
-} from '@remix-run/node';
-import { data } from '@remix-run/node';
-import { useActionData } from '@remix-run/react';
+} from "@remix-run/node";
+import { data } from "@remix-run/node";
 
-import { CenterContent } from '@shared/components';
-import { LoginForm } from '@modules/login/components';
-import { Card as CardShadcn, CardHeader, CardTitle } from '@ui/card';
-import { LoginLogic } from '@modules/login/logic/login.logic';
+import { CenterContent } from "@shared/components";
+import { LoginForm } from "@modules/login/components";
+import { Card as CardShadcn, CardHeader, CardTitle } from "@ui/card";
+import { LoginLogic } from "@modules/login/logic/login.logic";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Login | R&S' },
+    { title: "Login | R&S" },
     {
-      name: 'description',
-      content: 'Logueate y Postula; facil, seguro y rápido',
+      name: "description",
+      content: "Logueate y Postula; facil, seguro y rápido",
     },
   ];
 };
 
 export default function Login() {
-  const actionData = useActionData<typeof action>();
   return (
     <CenterContent>
       <CardShadcn className="max-w-[400px] w-full mx-auto pt-1">
@@ -39,7 +37,7 @@ export default function Login() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  let loginErrors = await LoginLogic.login(request);
+  const loginErrors = await LoginLogic.login(request);
   return data(loginErrors);
 }
 

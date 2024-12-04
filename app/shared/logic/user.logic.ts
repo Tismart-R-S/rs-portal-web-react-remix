@@ -1,12 +1,12 @@
-import { SessionProvider } from '@providers/session.provider';
-import getUserUseCase from '@data/usecases/user/get-user.usecase';
-import { UserResponseModel } from '@data/models/user.model';
-import AuthLogic from './auth.logic';
+import { SessionProvider } from "@providers/session.provider";
+import getUserUseCase from "@data/usecases/user/get-user.usecase";
+import { UserResponseModel } from "@data/models/user.model";
+import AuthLogic from "./auth.logic";
 
 export namespace UserLogic {
-  export const getData = async (cookie: string, redirect = '/') => {
-    let session = await SessionProvider.get(cookie);
-    let { token, isAuthenticated, user } = session;
+  export const getData = async (cookie: string, redirect = "/") => {
+    const session = await SessionProvider.get(cookie);
+    const { token, isAuthenticated, user } = session;
 
     if (!isAuthenticated) return null;
     if (user) return user;

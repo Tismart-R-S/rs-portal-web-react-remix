@@ -63,7 +63,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const path = new URL(request.url).pathname;
 
   if (user?.isVerified === false && path !== '/email-verified') {
-    throw redirect('/email-verified');
+    return redirect('/email-verified');
   }
 
   return data({ user });

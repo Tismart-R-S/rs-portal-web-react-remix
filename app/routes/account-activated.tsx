@@ -1,19 +1,12 @@
-import {
-  data,
-  redirect,
-  type LoaderFunctionArgs,
-  type MetaFunction,
-} from '@remix-run/node';
+import { type MetaFunction } from "@remix-run/node";
 
-import { LoginLogic } from '@modules/login/logic/login.logic';
-import { CenterContent } from '@shared/components';
-import { Button } from '@ui/button';
-import { SessionProvider } from '~/providers/session.provider';
+import { CenterContent } from "@shared/components";
+import { Button } from "@ui/button";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Cuenta activada | R&S' },
-    { name: 'description', content: '¡Empecemos con tu postulación!' },
+    { title: "Cuenta activada | R&S" },
+    { name: "description", content: "¡Empecemos con tu postulación!" },
   ];
 };
 
@@ -41,8 +34,4 @@ export default function AccountActivated() {
       </div>
     </CenterContent>
   );
-}
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  return data({});
 }

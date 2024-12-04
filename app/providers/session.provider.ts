@@ -5,7 +5,6 @@ import {
   commitSession,
   destroySession,
 } from "@lib/auth/storage.server";
-import { LoginResponseModel } from "@data/models/login.model";
 import { UserResponseModel } from "@data/models/user.model";
 
 export namespace SessionProvider {

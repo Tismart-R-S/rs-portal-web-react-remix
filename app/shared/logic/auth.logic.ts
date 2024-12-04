@@ -1,8 +1,8 @@
-import { BaseResponse } from '@data/interfaces/global.interface';
-import refreshTokenUseCase from '@data/usecases/auth/refresh-token.usecase';
-import { SessionProvider } from '@providers/session.provider';
-import { SessionLogic } from './session.logic';
-import { RefreshTokenResponseModel } from '@data/models/refres-token.model';
+import { BaseResponse } from "@data/interfaces/global.interface";
+import refreshTokenUseCase from "@data/usecases/auth/refresh-token.usecase";
+import { SessionProvider } from "@providers/session.provider";
+import { SessionLogic } from "./session.logic";
+import { RefreshTokenResponseModel } from "@data/models/refres-token.model";
 
 namespace AuthLogic {
   interface AuthUseCaseResponse<T> {
@@ -17,7 +17,7 @@ namespace AuthLogic {
 
     const response = await refreshTokenUseCase(refreshToken);
 
-    console.log('------refreshSessionToken------');
+    console.log("------refreshSessionToken------");
     console.log({ response });
 
     if (!response.ok) await SessionLogic.logOut(cookie, route); // cerrar session y regirigue
@@ -30,11 +30,12 @@ namespace AuthLogic {
   export const executeUseCase = async <T>(
     cookie: string,
     route: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     func: () => Promise<BaseResponse<any>>
   ): Promise<AuthUseCaseResponse<T>> => {
-    let response = await func();
+    const response = await func();
 
-    console.log('------executeUseCase------');
+    console.log("------executeUseCase------");
     console.log({ response });
 
     if (response.statusCode === 403) await refreshSessionToken(cookie, route);
