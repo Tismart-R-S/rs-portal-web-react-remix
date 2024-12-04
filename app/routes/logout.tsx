@@ -9,12 +9,12 @@ export async function action({ request }: ActionFunctionArgs) {
   const cookie = await SessionProvider.destroy(
     request.headers.get("cookie") || ""
   );
-  return redirect("/", { headers: { "Set-Cookie": cookie } });
+  throw redirect("/", { headers: { "Set-Cookie": cookie } });
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const path = new URL(request.url).pathname;
-  return redirect(path);
+  throw redirect(path);
 };
 
 export default function Logout() {

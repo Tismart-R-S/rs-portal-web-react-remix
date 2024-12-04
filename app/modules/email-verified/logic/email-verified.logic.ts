@@ -1,12 +1,12 @@
-import { SessionProvider } from '@providers/session.provider';
-import { redirect } from '@remix-run/node';
+import { SessionProvider } from "@providers/session.provider";
+import { redirect } from "@remix-run/node";
 
 namespace EmailVerifiedLogic {
   export const verifyShowPage = async (request: Request) => {
-    const cookie = request.headers.get('cookie') || '';
-    const user = await SessionProvider.getByLabel(cookie, 'user');
+    const cookie = request.headers.get("cookie") || "";
+    const user = await SessionProvider.getByLabel(cookie, "user");
 
-    if (!user || user?.isVerified === true) return redirect('/');
+    if (!user || user?.isVerified === true) throw redirect("/");
   };
 }
 

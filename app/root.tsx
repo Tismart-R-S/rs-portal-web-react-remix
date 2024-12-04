@@ -5,25 +5,25 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from '@remix-run/react';
-import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { data, redirect } from '@remix-run/node';
+} from "@remix-run/react";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { data, redirect } from "@remix-run/node";
 
-import './tailwind.css';
-import { Header } from '@shared/layouts';
-import { RootLogic } from '@modules/index/logic/root.logic';
+import "./tailwind.css";
+import { Header } from "@shared/layouts";
+import { RootLogic } from "@modules/index/logic/root.logic";
 
 export const links: LinksFunction = () => [
-  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
-    rel: 'preconnect',
-    href: 'https://fonts.gstatic.com',
-    crossOrigin: 'anonymous',
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "anonymous",
   },
   {
-    rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
 
@@ -62,8 +62,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const user = await RootLogic.userData(request);
   const path = new URL(request.url).pathname;
 
-  if (user?.isVerified === false && path !== '/email-verified') {
-    return redirect('/email-verified');
+  if (user?.isVerified === false && path !== "/email-verified") {
+    throw redirect("/email-verified");
   }
 
   return data({ user });

@@ -12,14 +12,14 @@ export namespace SessionLogic {
     console.log(data);
     const session = await SessionProvider.save(cookie, data);
 
-    return redirect(route, { headers: { "Set-Cookie": session } });
+    throw redirect(route, { headers: { "Set-Cookie": session } });
   };
 
   export const authenticate = async (cookie: string, route = "/") => {
     const session = await SessionProvider.get(cookie);
     const { isAuthenticated } = session;
 
-    if (isAuthenticated) return redirect(route);
+    if (isAuthenticated) throw redirect(route);
 
     return isAuthenticated;
   };
@@ -27,7 +27,7 @@ export namespace SessionLogic {
   export const logOut = async (cookie: string, route = "/") => {
     const session = await SessionProvider.destroy(cookie);
 
-    return redirect(route, { headers: { "Set-Cookie": session } });
+    throw redirect(route, { headers: { "Set-Cookie": session } });
   };
 
   export const saveToken = async (
@@ -37,6 +37,6 @@ export namespace SessionLogic {
   ) => {
     const session = await SessionProvider.saveToken(cookie, token);
 
-    return redirect(route, { headers: { "Set-Cookie": session } });
+    throw redirect(route, { headers: { "Set-Cookie": session } });
   };
 }

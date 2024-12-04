@@ -1,13 +1,13 @@
-import { data, LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
+import { data, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
 
-import EmailVerifiedLogic from '@modules/email-verified/logic/email-verified.logic';
-import { CenterContent } from '@shared/components';
-import { Button } from '@ui/button';
+import EmailVerifiedLogic from "@modules/email-verified/logic/email-verified.logic";
+import { CenterContent } from "@shared/components";
+import { Button } from "@ui/button";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Verificar Correo | R&S' },
-    { name: 'description', content: 'Verifica tu correo y estarás listo' },
+    { title: "Verificar Correo | R&S" },
+    { name: "description", content: "Verifica tu correo y estarás listo" },
   ];
 };
 
@@ -42,7 +42,7 @@ export default function EmailVerified() {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  EmailVerifiedLogic.verifyShowPage(request);
+  await EmailVerifiedLogic.verifyShowPage(request);
 
   return data({});
 }
