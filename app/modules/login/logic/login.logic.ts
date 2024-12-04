@@ -6,10 +6,9 @@ import { UserLogic } from "@shared/logic/user.logic";
 
 export namespace LoginLogic {
   export const login = async (request: Request) => {
-    let response: string[] = [];
     const login = await authenticator.authenticate(StrategyKeys.auth, request);
 
-    if (!login.ok) response = login.data as string[];
+    if (!login.ok) return login.data as string[];
 
     const access = login.data as LoginResponseModel;
     const cookie = request.headers.get("cookie") || "";
@@ -17,7 +16,7 @@ export namespace LoginLogic {
 
     await SessionLogic.logIn(cookie, { ...access, user });
 
-    return response;
+    return [];
   };
 
   export const authenticate = async (request: Request) => {

@@ -16,7 +16,6 @@ authenticator.use(
     const password = String(form.get("password"));
 
     const res = await loginUseCase({ email, password });
-    console.log(res);
 
     return res;
   }),
