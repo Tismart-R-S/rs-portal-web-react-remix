@@ -1,9 +1,8 @@
-import { Form, Link } from '@remix-run/react';
+import { Form, Link } from "@remix-run/react";
 import { LogOut, UserRound } from "lucide-react";
 
-
-import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
-import { Button } from '@ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from "@ui/avatar";
+import { Button } from "@ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,22 +10,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@ui/dropdown-menu';
-import { ProfileButtonsProps } from '../layout-props.interface';
+} from "@ui/dropdown-menu";
+import { ProfileButtonsProps } from "../layout-props.interface";
 
 const ProfileButtons = ({ user }: ProfileButtonsProps) => {
   return (
     <>
       <div className="flex gap-3">
-        <div>
-          <h5 className="font-semibold text-sm">{user.names}</h5>
-          <p className="text-muted-foreground text-xs">Postulante</p>
-        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="flex gap-4 cursor-pointer">
               <div>
-                <h5 className="font-semibold text-sm">Pepita Juárez</h5>
+                <h5 className="font-semibold text-sm">{user.names}</h5>
                 <p className="text-muted-foreground text-xs">Postulante</p>
               </div>
               <Avatar className="w-9 h-9 bg-gray-100 flex">
