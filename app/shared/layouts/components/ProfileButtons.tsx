@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu';
+} from '@ui/dropdown-menu';
 import { ProfileButtonsProps } from '../layout-props.interface';
 
 const ProfileButtons = ({ user }: ProfileButtonsProps) => {

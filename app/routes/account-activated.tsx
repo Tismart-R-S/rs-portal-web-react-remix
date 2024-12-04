@@ -1,7 +1,14 @@
-import type { MetaFunction } from '@remix-run/node';
+import {
+  data,
+  redirect,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+} from '@remix-run/node';
 
+import { LoginLogic } from '@modules/login/logic/login.logic';
 import { CenterContent } from '@shared/components';
 import { Button } from '@ui/button';
+import { SessionProvider } from '~/providers/session.provider';
 
 export const meta: MetaFunction = () => {
   return [
@@ -34,4 +41,8 @@ export default function AccountActivated() {
       </div>
     </CenterContent>
   );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  return data({});
 }

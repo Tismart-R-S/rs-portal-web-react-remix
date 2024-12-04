@@ -8,15 +8,11 @@ import {
 } from '@remix-run/react';
 import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { redirect, data } from '@remix-run/node';
-import { destroySession, getSession } from '@lib/auth/storage.server';
+import { data, redirect } from '@remix-run/node';
 
 import './tailwind.css';
 import { Header } from '@shared/layouts';
-import getUserUseCase from './data/usecases/user/get-user.usecase';
-import { UserResponseModel } from '@data/models/user.model';
-import { RootLogic } from './modules/index/logic/root.logic';
-import { SessionProvider } from './providers/session.provider';
+import { RootLogic } from '@modules/index/logic/root.logic';
 
 export const links: LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -45,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Header user={loaderData.data} />
+        <Header user={loaderData.user} />
         <main className="max-w-5xl mx-auto py-10 px-4">{children}</main>
         <ScrollRestoration />
         <Scripts />
@@ -64,8 +60,11 @@ export default function App() {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await RootLogic.userData(request);
+  const path = new URL(request.url).pathname;
 
-  console.log({ user });
+  if (user?.isVerified === false && path !== '/email-verified') {
+    throw redirect('/email-verified');
+  }
 
-  return data(user);
+  return data({ user });
 }

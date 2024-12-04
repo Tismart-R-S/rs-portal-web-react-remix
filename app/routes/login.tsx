@@ -9,7 +9,7 @@ import { useActionData } from '@remix-run/react';
 import { CenterContent } from '@shared/components';
 import { LoginForm } from '@modules/login/components';
 import { Card as CardShadcn, CardHeader, CardTitle } from '@ui/card';
-import { LoginLogic } from '~/modules/login/logic/login.logic';
+import { LoginLogic } from '@modules/login/logic/login.logic';
 
 export const meta: MetaFunction = () => {
   return [
@@ -39,11 +39,11 @@ export default function Login() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  let loginErrors = await LoginLogic.login(request, '/');
+  let loginErrors = await LoginLogic.login(request);
   return data(loginErrors);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const isAuthenticated = await LoginLogic.authenticate(request, '/');
+  const isAuthenticated = await LoginLogic.authenticate(request);
   return data(isAuthenticated);
 }

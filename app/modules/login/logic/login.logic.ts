@@ -1,38 +1,28 @@
-import { redirect } from '@remix-run/node';
-
 import { authenticator } from '@lib/auth/authenticator.server';
 import { StrategyKeys } from '@shared/constants/keys.constants';
 import { LoginResponseModel } from '@data/models/login.model';
-import { ApiAuthErrorModel } from '@data/models/global.model';
-import { SessionProvider } from '~/providers/session.provider';
+import { SessionLogic } from '@shared/logic/session.logic';
+import { UserLogic } from '@shared/logic/user.logic';
 
 export namespace LoginLogic {
-  export const login = async (request: Request, route: string) => {
+  export const login = async (request: Request) => {
+    let response: string[] = [];
     let login = await authenticator.authenticate(StrategyKeys.auth, request);
 
-    if (login.statusCode >= 400)
-      return (login.data as ApiAuthErrorModel).message as string[];
+    if (!login.ok) response = login.data as string[];
 
-    const data = login.data as LoginResponseModel;
-    console.log({ data });
+    const access = login.data as LoginResponseModel;
+    const cookie = request.headers.get('cookie') || '';
+    const user = await UserLogic.getDataCommonWay(access.accessToken);
 
-    const cookie = await SessionProvider.save(
-      request.headers.get('cookie') || '',
-      data
-    );
+    await SessionLogic.logIn(cookie, { ...access, user });
 
-    throw redirect(route, {
-      headers: { 'Set-Cookie': cookie },
-    });
+    return response;
   };
 
-  export const authenticate = async (request: Request, route: string) => {
-    const session = await SessionProvider.get(
-      request.headers.get('cookie') || ''
-    );
-    const { isAuthenticated } = session;
-
-    if (isAuthenticated) throw redirect(route);
+  export const authenticate = async (request: Request) => {
+    const cookie = request.headers.get('cookie') || '';
+    const isAuthenticated = await SessionLogic.authenticate(cookie);
 
     return isAuthenticated;
   };
