@@ -1,8 +1,8 @@
 import AuthRepository from "@data/repositories/auth.repository";
 
-const verifyEmailTokenUseCase = async (token: string, email_token: string) => {
-  const res = await AuthRepository.verifyEmailToken(token, email_token);
-  console.log({ res, token, email_token });
+const verifyEmailTokenUseCase = async (email_token: string) => {
+  const res = await AuthRepository.verifyEmailToken(email_token);
+  console.log({ res, email_token });
   return res;
 };
 

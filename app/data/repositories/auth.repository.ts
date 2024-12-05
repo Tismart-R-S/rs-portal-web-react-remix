@@ -45,11 +45,11 @@ namespace AuthRepository {
     return response;
   }
 
-  export async function verifyEmailToken(token: string, email_token: string) {
+  export async function verifyEmailToken(email_token: string) {
     let response: VerifyEmailTokenResponse;
 
     try {
-      response = await AuthApiAdapter.verifyEmailToken(token, email_token);
+      response = await AuthApiAdapter.verifyEmailToken(email_token);
     } catch (error) {
       response = RepositoryUtils.responseError(error);
     }

@@ -60,42 +60,44 @@ export default function EmailVerified() {
           tu bandeja de entrada y haz clic en el enlace de confirmación para
           activar tu cuenta.
         </p>
-        <div>
-          <h5 className="text-md font-semibold text-center">
-            ¿No recibiste el correo?
-          </h5>
-          <p className="text-center">
-            Revisa tu carpeta de spam o correo no deseado, o haz clic en el
-            botón de abajo para reenviar el correo de verificación.
-          </p>
-          <div className="flex justify-center my-6">
-            <Form method="post">
-              <Button className="mx-auto">Reenviar correo</Button>
-            </Form>
+        {loaderData?.isAuthenticated && (
+          <div>
+            <h5 className="text-md font-semibold text-center">
+              ¿No recibiste el correo?
+            </h5>
+            <p className="text-center">
+              Revisa tu carpeta de spam o correo no deseado, o haz clic en el
+              botón de abajo para reenviar el correo de verificación.
+            </p>
+            <div className="flex justify-center my-6">
+              <Form method="post">
+                <Button className="mx-auto">Reenviar correo</Button>
+              </Form>
+            </div>
           </div>
-          {message && <p>{message}</p>}
-        </div>
+        )}
+        {message && <p>{message}</p>}
       </div>
     </CenterContent>
   );
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  await EmailVerifiedLogic.verifyShowPage(request);
+  const { isAuthenticated, email_token } =
+    await EmailVerifiedLogic.verifyShowPage(request);
 
-  const params = new URL(request.url).searchParams;
-  const token = params.get("token");
-
-  if (token) {
-    const response = await EmailVerifiedLogic.verifyEmailToken(request, token);
-    return data(response);
+  if (email_token) {
+    const response = await EmailVerifiedLogic.verifyEmailToken(
+      request,
+      email_token
+    );
+    return data({ ...response, isAuthenticated });
   }
 
-  return data(null);
+  return data({ message: "", ok: true, isAuthenticated });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const response = await EmailVerifiedLogic.resendVerificationEmail(request);
-  console.log({ response });
   return data(response);
 }

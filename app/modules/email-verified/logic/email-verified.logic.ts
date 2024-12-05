@@ -11,16 +11,18 @@ import { SessionLogic } from "~/shared/logic/session.logic";
 namespace EmailVerifiedLogic {
   export const verifyShowPage = async (request: Request) => {
     const cookie = request.headers.get("cookie") || "";
-    const user = await SessionProvider.getByLabel(cookie, "user");
+    const { user, isAuthenticated } = await SessionProvider.get(cookie);
+
+    // with session and verified
+    if (user && user.isVerified === true) throw redirect("/");
 
     const params = new URL(request.url).searchParams;
     const email_token = params.get("token");
 
-    if (user && user.isVerified === true) throw redirect("/");
-    // no tiene token y no tiene sessión
+    // no session and no email token
     if (!user && !email_token) throw redirect("/");
 
-    // if (!user || user?.isVerified === true) throw redirect("/");
+    return { isAuthenticated, email_token };
   };
 
   export const resendVerificationEmail = async (request: Request) => {
@@ -45,14 +47,16 @@ namespace EmailVerifiedLogic {
   ) => {
     const cookie = request.headers.get("cookie") || "";
     const token = await SessionProvider.getByLabel(cookie, "token");
-    const response = await verifyEmailTokenUseCase("", email_token);
+    const { data, ok } = await verifyEmailTokenUseCase(email_token);
 
-    const { data, ok } = response;
-
+    // ok and with session
     if (ok && token) {
       const user = await UserLogic.getDataCommonWay(token);
       await SessionLogic.save(cookie, "user", user, "/account-activated");
     }
+
+    // ok and no session
+    if (ok) throw redirect("/account-activated");
 
     const message = ok
       ? (data as VerifyEmailTokenResponseModel).message

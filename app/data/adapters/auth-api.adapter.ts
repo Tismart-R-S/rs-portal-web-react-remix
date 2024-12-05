@@ -44,16 +44,10 @@ namespace AuthApiAdapter {
   }
 
   export async function verifyEmailToken(
-    token: string,
     email_token: string
   ): Promise<BaseResponse<VerifyEmailTokenResponseModel>> {
     const response = await AuthClient.get<void>(
-      `/verify-email-token?token=${email_token}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/verify-email-token?token=${email_token}`
     );
 
     const message = "Correo verificado con exito";

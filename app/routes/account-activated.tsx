@@ -1,7 +1,9 @@
-import { type MetaFunction } from "@remix-run/node";
+import { data, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 
 import { CenterContent } from "@shared/components";
 import { Button } from "@ui/button";
+import AccountActivatedLogic from "~/modules/account-activated/logic/account-activated.logic";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,6 +13,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function AccountActivated() {
+  const loaderData = useLoaderData<typeof loader>();
+
   return (
     <CenterContent>
       <div>
@@ -28,10 +32,26 @@ export default function AccountActivated() {
             el formulario de postulante.
           </p>
           <div className="flex justify-center my-6">
-            <Button className="mx-auto">Ir a mi perfil</Button>
+            {loaderData.isAuthenticated ? (
+              <Button asChild className="mx-auto">
+                <Link to="/applicant-data">Ir a mi perfil</Link>
+              </Button>
+            ) : (
+              <Button asChild className="mx-auto">
+                <Link to="/login">Iniciar Sesión</Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
     </CenterContent>
   );
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { isAuthenticated } = await AccountActivatedLogic.verifyShowPage(
+    request
+  );
+
+  return data({ isAuthenticated });
 }

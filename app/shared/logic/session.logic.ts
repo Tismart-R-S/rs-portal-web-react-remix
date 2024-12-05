@@ -48,7 +48,7 @@ export namespace SessionLogic {
     value: T,
     route = "/"
   ) => {
-    const session = await SessionProvider.saveByLabel<T>(cookie, label, value);
+    const session = await SessionProvider.saveByLabel(cookie, label, value);
 
     throw redirect(route, { headers: { "Set-Cookie": session } });
   };

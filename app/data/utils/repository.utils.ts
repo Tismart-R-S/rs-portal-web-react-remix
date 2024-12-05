@@ -11,10 +11,15 @@ namespace RepositoryUtils {
     let response;
     if (isAxiosError(error)) {
       const err = error.response!.data as ApiAuthErrorModel;
+
+      const message = Array.isArray(err.message)
+        ? err.message.join("|")
+        : err.message;
+
       response = {
         ok: false,
         statusCode: err.statusCode,
-        data: err.message,
+        data: message,
       } as T;
     } else {
       response = {
