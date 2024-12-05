@@ -7,7 +7,7 @@ const onlyNumberErrorMessage = "Solo puede ingresar números";
 const phoneWithCodeNumberRegex = /^\+(\d{1,4})\s?(\d{6,15})$/;
 const phoneWithCodeErrorMessage = "Formato de número incorrecto";
 
-export const applicationFormValidator = z.object({
+export const applicantDataFormValidator = z.object({
   country: z
     .string()
     .regex(onlyLettersRegex, onlyLetterErrorMessage)
@@ -39,7 +39,7 @@ export const applicationFormValidator = z.object({
     .array(z.string())
     .min(0, "Debe seleccionar almenos un perfil de interes")
     .optional(),
-  yearsExeperience: z.string().min(1, "Ingrese sus años de experiencia."),
+  yearsExperience: z.string().min(1, "Ingrese sus años de experiencia."),
   technologies: z
     .array(z.string())
     .min(0, "Debe seleccionar almenos una tecnología.")

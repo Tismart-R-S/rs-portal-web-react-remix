@@ -52,7 +52,7 @@ const ProfileButtons = ({ user }: ProfileButtonsProps) => {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/postulation-data" className="cursor-pointer">
+              <Link to="/applicant-data" className="cursor-pointer">
                 Mis datos de postulación
               </Link>
             </DropdownMenuItem>

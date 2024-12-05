@@ -15,4 +15,8 @@ export const technologiesList = [
     value: "springboot",
     label: "Springboot",
   },
+  {
+    value: "net",
+    label: "Net",
+  },
 ];

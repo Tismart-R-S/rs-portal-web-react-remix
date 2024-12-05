@@ -1,4 +1,4 @@
-export type ApplicationFormValidationType = {
+export type ApplicantDataFormValidationType = {
   country: string;
   city: string;
   documentType: string;
@@ -6,7 +6,7 @@ export type ApplicationFormValidationType = {
   expectedSalary: number;
   phoneNumber: string;
   targetProfiles: string[];
-  yearsExeperience: string;
+  yearsExperience: string;
   technologies: string[];
   seniority: string;
   workModes: string[];
