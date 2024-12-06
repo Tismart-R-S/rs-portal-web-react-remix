@@ -4,7 +4,7 @@ import { RefreshTokenResponseModel } from "../models/refresh-token.model";
 import { SendVerifByEmailResponseModel } from "../models/send-verification-by-email.model";
 import { VerifyEmailTokenResponseModel } from "../models/verify-email-token.model";
 
-export type LoginResponse = BaseResponse<LoginResponseModel | string[]>;
+export type LoginResponse = BaseResponse<LoginResponseModel | string>;
 
 export type RefreshTokenResponse = BaseResponse<
   RefreshTokenResponseModel | string

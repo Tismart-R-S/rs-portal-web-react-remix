@@ -8,7 +8,7 @@ export namespace LoginLogic {
   export const login = async (request: Request) => {
     const login = await authenticator.authenticate(StrategyKeys.auth, request);
 
-    if (!login.ok) return login.data as string[];
+    if (!login.ok) return login.data as string;
 
     const cookie = request.headers.get("cookie") || "";
     const access = login.data as LoginResponseModel;
@@ -16,7 +16,7 @@ export namespace LoginLogic {
 
     await SessionLogic.logIn(cookie, { ...access, user });
 
-    return [];
+    return "";
   };
 
   export const authenticate = async (request: Request) => {

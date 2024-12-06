@@ -1,21 +1,23 @@
 import { SessionLogic } from "@shared/logic/session.logic";
 import { UserLogic } from "@shared/logic/user.logic";
+import { RegisterRequestModel } from "@data/models/register.model";
 
 export namespace RegisterLogic {
   export const register = async (request: Request) => {
-    // validate fields
     const formData = await request.formData();
     const password = String(formData.get("password"));
     const repeatPassword = String(formData.get("repeatPassword"));
 
-    if (password !== repeatPassword) return ["Las contraseñas no coinciden"];
+    if (password !== repeatPassword) return "Las contraseñas no coinciden";
 
-    const values = {
+    const values: RegisterRequestModel = {
       names: String(formData.get("names")),
       lastNames: String(formData.get("lastNames")),
       email: String(formData.get("email")),
-      password: String(formData.get("password")),
+      password: password,
     };
+
+    console.log("register", values);
 
     const register = await UserLogic.register(values, "/login");
 

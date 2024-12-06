@@ -6,7 +6,7 @@ import loginUseCase from "@data/usecases/auth/login.usecase";
 import { BaseResponse } from "@data/interfaces/global.interface";
 import { LoginResponseModel } from "@data/models/login.model";
 
-type AuthenticatorResponse = BaseResponse<LoginResponseModel | string[]>;
+type AuthenticatorResponse = BaseResponse<LoginResponseModel | string>;
 
 export const authenticator = new Authenticator<AuthenticatorResponse>();
 
