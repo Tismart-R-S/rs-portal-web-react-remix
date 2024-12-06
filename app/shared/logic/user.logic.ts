@@ -3,9 +3,9 @@ import getUserUseCase from "@data/usecases/user/get-user.usecase";
 import { UserResponseModel } from "@data/models/user.model";
 import AuthLogic from "./auth.logic";
 import { SessionLogic } from "./session.logic";
-import { redirect } from "@remix-run/node";
 import registerUseCase from "~/data/usecases/user/register.usecase";
 import { RegisterRequestModel } from "~/data/models/register.model";
+import { IRoute } from "../interface/global.interface";
 
 export namespace UserLogic {
   export const getData = async (cookie: string, route = "/") => {
@@ -36,11 +36,27 @@ export namespace UserLogic {
     return response.data as UserResponseModel;
   };
 
-  export const register = async (values: RegisterRequestModel, route = "/") => {
+  export const register = async (
+    cookie: string,
+    values: RegisterRequestModel,
+    route: IRoute
+  ) => {
     const { ok, data } = await registerUseCase(values);
 
-    if (ok) throw redirect(route);
+    if (!ok) {
+      const alert = {
+        type: "alert",
+        message: data as string,
+        ok,
+      };
+      await SessionLogic.flashMessage(cookie, alert, route.current);
+    }
 
-    return data as string;
+    const alert = {
+      type: "alert",
+      message: "Registro exitoso, ahora puedes iniciar sesión",
+      ok,
+    };
+    await SessionLogic.flashMessage(cookie, alert, route.redirect);
   };
 }

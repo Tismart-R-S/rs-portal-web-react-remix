@@ -4,7 +4,6 @@ import AuthLogic from "@shared/logic/auth.logic";
 import { SendVerifByEmailResponseModel } from "@data/models/send-verification-by-email.model";
 import sendVerificationByEmailUseCase from "@data/usecases/auth/send-verification-by-email.usecase";
 import verifyEmailTokenUseCase from "@data/usecases/auth/verify-email-token.usecase";
-import { VerifyEmailTokenResponseModel } from "~/data/models/verify-email-token.model";
 import { UserLogic } from "~/shared/logic/user.logic";
 import { SessionLogic } from "~/shared/logic/session.logic";
 
@@ -18,6 +17,12 @@ namespace EmailVerifiedLogic {
 
     const params = new URL(request.url).searchParams;
     const email_token = params.get("token");
+    // const withFlashMessage = SessionProvider.getFlashMessage(
+    //   cookie,
+    //   "flash_message"
+    // );
+
+    // if (!user && !email_token && !withFlashMessage) throw redirect("/");
 
     // no session and no email token
     if (!user && !email_token) throw redirect("/");
@@ -46,6 +51,7 @@ namespace EmailVerifiedLogic {
     email_token: string
   ) => {
     const cookie = request.headers.get("cookie") || "";
+    const path = new URL(request.url).pathname;
     const token = await SessionProvider.getByLabel(cookie, "token");
     const { data, ok } = await verifyEmailTokenUseCase(email_token);
 
@@ -58,11 +64,13 @@ namespace EmailVerifiedLogic {
     // ok and no session
     if (ok) throw redirect("/account-activated");
 
-    const message = ok
-      ? (data as VerifyEmailTokenResponseModel).message
-      : (data as string);
+    const alert = {
+      type: "alert",
+      message: data as string,
+      ok,
+    };
 
-    return { ok, message };
+    await SessionLogic.flashMessage(cookie, alert, path);
   };
 }
 

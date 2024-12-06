@@ -3,7 +3,7 @@ import {
   json,
   data,
   ActionFunctionArgs,
-  LoaderFunctionArgs,
+  // LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { makeDomainFunction } from "domain-functions";
@@ -11,7 +11,7 @@ import { createFormAction } from "remix-forms";
 
 import { Card as CardShadcn, CardHeader, CardTitle } from "@ui/card";
 import { CenterContent } from "@shared/components";
-import { LoginLogic } from "~/modules/login/logic/login.logic";
+// import { LoginLogic } from "~/modules/login/logic/login.logic";
 import { RegisterForm } from "~/modules/register/components";
 import { RegisterLogic } from "~/modules/register/logic/register.logic";
 import { registerFormValidator } from "~/modules/register/utils/register-form.validator";
@@ -48,10 +48,10 @@ export default function Register() {
   );
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const isAuthenticated = await LoginLogic.authenticate(request);
-  return data(isAuthenticated);
-}
+// export async function loader({ request }: LoaderFunctionArgs) {
+//   const isAuthenticated = await LoginLogic.authenticate(request);
+//   return data(isAuthenticated);
+// }
 
 export async function action({ request }: ActionFunctionArgs) {
   let registerErrors = "";

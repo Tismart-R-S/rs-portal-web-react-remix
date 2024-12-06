@@ -4,12 +4,11 @@ import {
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 
 import EmailVerifiedLogic from "@modules/email-verified/logic/email-verified.logic";
 import { CenterContent } from "@shared/components";
 import { Button } from "@ui/button";
-import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,33 +19,6 @@ export const meta: MetaFunction = () => {
 
 export default function EmailVerified() {
   const loaderData = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
-
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    if (actionData?.message) {
-      setMessage(actionData.message);
-
-      // Ocultar el mensaje después de 5 segundos
-      const timer = setTimeout(() => {
-        setMessage("");
-      }, 5000);
-
-      return () => clearTimeout(timer); // Limpiar el temporizador
-    }
-
-    if (loaderData?.message) {
-      setMessage(loaderData.message);
-
-      // Ocultar el mensaje después de 5 segundos
-      const timer = setTimeout(() => {
-        setMessage("");
-      }, 5000);
-
-      return () => clearTimeout(timer); // Limpiar el temporizador
-    }
-  }, [actionData, loaderData]);
 
   return (
     <CenterContent>
@@ -76,7 +48,6 @@ export default function EmailVerified() {
             </div>
           </div>
         )}
-        {message && <p>{message}</p>}
       </div>
     </CenterContent>
   );
@@ -86,15 +57,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { isAuthenticated, email_token } =
     await EmailVerifiedLogic.verifyShowPage(request);
 
-  if (email_token) {
-    const response = await EmailVerifiedLogic.verifyEmailToken(
-      request,
-      email_token
-    );
-    return data({ ...response, isAuthenticated });
-  }
+  if (email_token)
+    await EmailVerifiedLogic.verifyEmailToken(request, email_token);
 
-  return data({ message: "", ok: true, isAuthenticated });
+  return data({ isAuthenticated });
 }
 
 export async function action({ request }: ActionFunctionArgs) {

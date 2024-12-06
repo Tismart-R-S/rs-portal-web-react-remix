@@ -15,13 +15,25 @@ export namespace SessionLogic {
     throw redirect(route, { headers: { "Set-Cookie": session } });
   };
 
-  export const authenticate = async (cookie: string, route = "/") => {
+  export const authenticate = async (
+    cookie: string,
+    currentRoute: string,
+    redirectTo = "/"
+  ) => {
     const session = await SessionProvider.get(cookie);
     console.log("------authenticate------");
-    console.log({ session });
     const { isAuthenticated } = session;
 
-    if (isAuthenticated) throw redirect(route);
+    console.log({ isAuthenticated, currentRoute, redirectTo, session });
+
+    const pageIfNotAuthenticated = ["/register", "/login"];
+    const pageOnlyIfAuthenticated = ["/profile", "/applicant-data"];
+
+    if (
+      (isAuthenticated && pageIfNotAuthenticated.includes(currentRoute)) ||
+      (!isAuthenticated && pageOnlyIfAuthenticated.includes(currentRoute))
+    )
+      throw redirect(redirectTo);
 
     return isAuthenticated;
   };
@@ -51,5 +63,25 @@ export namespace SessionLogic {
     const session = await SessionProvider.saveByLabel(cookie, label, value);
 
     throw redirect(route, { headers: { "Set-Cookie": session } });
+  };
+
+  export const flashMessage = async (
+    cookie: string,
+    data: SessionProvider.SessionFlashRequest,
+    route = "/"
+  ) => {
+    console.log("------flashMessage------");
+    console.log(route);
+    const session = await SessionProvider.flashMessage(
+      cookie,
+      "flash_message",
+      data
+    );
+
+    throw redirect(route, {
+      headers: {
+        "Set-Cookie": session,
+      },
+    });
   };
 }

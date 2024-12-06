@@ -2,7 +2,7 @@ import {
   redirect,
   json,
   data,
-  LoaderFunctionArgs,
+  // LoaderFunctionArgs,
   MetaFunction,
   ActionFunctionArgs,
 } from "@remix-run/node";
@@ -39,7 +39,6 @@ export default function Login() {
         <CardHeader>
           <CardTitle>
             <h1 className="text-xl text-center">Login Postulante</h1>
-            {/* <p>{actionData?.errors}</p> */}
           </CardTitle>
         </CardHeader>
         <LoginForm />
@@ -49,22 +48,14 @@ export default function Login() {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  let loginErrors = "";
-
   await formAction({
     request,
     schema: loginFormValidator,
     mutation,
     beforeSuccess: async () => {
-      loginErrors = await LoginLogic.login(request);
+      await LoginLogic.login(request);
     },
   });
 
-  console.log({ loginErrors });
-  return data(loginErrors);
-}
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  const isAuthenticated = await LoginLogic.authenticate(request);
-  return data(isAuthenticated);
+  return data({});
 }

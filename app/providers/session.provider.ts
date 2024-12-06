@@ -21,6 +21,12 @@ export namespace SessionProvider {
     user: UserResponseModel | null;
   }
 
+  export interface SessionFlashRequest {
+    type: string; // alert, modal, toast
+    message: string;
+    ok: boolean;
+  }
+
   export const save = async (cookie: string, data: SessionSaveResponse) => {
     const session = await getSession(cookie);
     session.set("token", data.accessToken);
@@ -70,4 +76,25 @@ export namespace SessionProvider {
   export const destroyWithSession = async (
     session: Session<SessionData, SessionData>
   ) => await destroySession(session);
+
+  export const flashMessage = async (
+    cookie: string,
+    label: string,
+    data: SessionFlashRequest
+  ) => {
+    const session = await getSession(cookie);
+    session.flash(label, data);
+    return await commitSession(session);
+  };
+
+  export const getFlashMessage = async (cookie: string, label: string) => {
+    const session = await getSession(cookie);
+
+    if (!session.has(label)) return null;
+
+    const data: SessionFlashRequest = session.get(label);
+    const newSession = await commitSession(session);
+
+    return { data, newSession };
+  };
 }

@@ -9,10 +9,12 @@ import {
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { data, redirect } from "@remix-run/node";
-
 import "./tailwind.css";
+
 import { Header } from "@shared/layouts";
 import { RootLogic } from "@modules/index/logic/root.logic";
+import { Alert } from "@shared/components";
+import { useEffect, useState } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -30,7 +32,16 @@ export const links: LinksFunction = () => [
 const queryClient = new QueryClient();
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData<typeof loader>();
+  const { user, message } = useLoaderData<typeof loader>();
+  const [showAlert, setShowAlert] = useState(false);
+
+  const dismissAlert = () => setShowAlert(false);
+
+  useEffect(() => {
+    if (message) {
+      setShowAlert(true);
+    }
+  }, [message]);
 
   return (
     <html lang="es">
@@ -41,7 +52,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <Header user={loaderData.user} />
+        <Header user={user} />
+        {showAlert && message && (
+          <Alert
+            description={message.message}
+            type={message.ok ? "success" : "error"}
+            duration={4000}
+            title={message.ok ? "Éxito" : "Error"}
+            onDismiss={dismissAlert}
+          />
+        )}
         <main className="max-w-5xl mx-auto py-10 px-4">{children}</main>
         <ScrollRestoration />
         <Scripts />
@@ -59,6 +79,8 @@ export default function App() {
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const isAuthenticated = await RootLogic.authenticate(request);
+
   const user = await RootLogic.userData(request);
   const path = new URL(request.url).pathname;
 
@@ -66,5 +88,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
     throw redirect("/email-verified");
   }
 
-  return data({ user });
+  // get flash message from session
+  const flashMessage = await RootLogic.getFlashMessage(request);
+  console.log({ flashMessage });
+
+  if (flashMessage !== null) {
+    const { data: message, newSession } = flashMessage;
+
+    return data(
+      { user: null, isAuthenticated, message },
+      {
+        headers: {
+          "Set-Cookie": newSession,
+        },
+      }
+    );
+  }
+
+  return data({ user, isAuthenticated, message: null });
 }
