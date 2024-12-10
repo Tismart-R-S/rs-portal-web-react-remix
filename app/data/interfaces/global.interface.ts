@@ -1,5 +1,5 @@
-export interface BaseResponse<T> {
+export interface BaseResponse<D> {
   ok: boolean;
   statusCode: number;
-  data: T;
+  data: D;
 }

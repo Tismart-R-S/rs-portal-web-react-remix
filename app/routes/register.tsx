@@ -48,23 +48,15 @@ export default function Register() {
   );
 }
 
-// export async function loader({ request }: LoaderFunctionArgs) {
-//   const isAuthenticated = await LoginLogic.authenticate(request);
-//   return data(isAuthenticated);
-// }
-
 export async function action({ request }: ActionFunctionArgs) {
-  let registerErrors = "";
-
   await formAction({
     request,
     schema: registerFormValidator,
     mutation,
     beforeSuccess: async () => {
-      registerErrors = await RegisterLogic.register(request);
+      await RegisterLogic.register(request);
     },
   });
 
-  console.log({ registerErrors });
-  return data(registerErrors);
+  return data({});
 }

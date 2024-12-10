@@ -1,22 +1,38 @@
 import { ApplicantDataModel } from "~/data/models/applicant-data.model";
-import { ApiRecruitmentResponseModel } from "~/data/models/global.model";
 import getApplicantDataUseCase from "~/data/usecases/applicant-data/get-applicant-data.usecase";
 import { SessionProvider } from "~/providers/session.provider";
 import AuthLogic from "~/shared/logic/auth.logic";
+import { ApplicantDataFormValidationType } from "../types/applicant-data-form.type";
+import updateApplicantDataUseCase from "~/data/usecases/applicant-data/update-applicant-data.usecase";
 
 export namespace ApplicantDataLogic {
   export const applicantData = async (request: Request) => {
     const cookie = request.headers.get("cookie") || "";
     const session = await SessionProvider.get(cookie);
-    const { token, isAuthenticated } = session;
     const path = new URL(request.url).pathname;
-    if (!isAuthenticated) return null;
 
-    const response = await AuthLogic.executeUseCase<
-      ApiRecruitmentResponseModel<ApplicantDataModel | string[]>
-    >(cookie, path, () => getApplicantDataUseCase(token));
+    const response = await AuthLogic.executeUseCase(cookie, path, () =>
+      getApplicantDataUseCase(session.token)
+    );
 
     if (!response.ok) return null;
-    return response.data;
+
+    return response.data as ApplicantDataModel;
+  };
+
+  export const save = async (
+    request: Request,
+    values: ApplicantDataFormValidationType
+  ) => {
+    const cookie = request.headers.get("cookie") || "";
+    const session = await SessionProvider.get(cookie);
+    const { token } = session;
+    const path = new URL(request.url).pathname;
+
+    const response = await AuthLogic.executeUseCase(cookie, path, () =>
+      updateApplicantDataUseCase(token, values)
+    );
+
+    console.log("applicantDataLogic.save response", response.data);
   };
 }

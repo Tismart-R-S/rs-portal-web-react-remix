@@ -18,8 +18,6 @@ export namespace RegisterLogic {
       redirect: "/login",
     };
 
-    console.log("register", values);
-
     await UserLogic.register(cookie, values, route);
   };
 }

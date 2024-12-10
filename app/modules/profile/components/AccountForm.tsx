@@ -7,12 +7,17 @@ import { useState } from "react";
 import { Form } from "~/shared/components";
 import { profileFormValidator } from "../utils/profile-form.validatior";
 import { ProfileFormValidationType } from "../types/profile-form";
+import { UserResponseModel } from "~/data/models/user.model";
 
-const AccountForm = () => {
+interface AccountFormProps {
+  formValues: UserResponseModel | null;
+}
+
+const AccountForm = ({ formValues }: AccountFormProps) => {
   const initialValues: ProfileFormValidationType = {
-    names: "Pepita",
-    lastnames: "Juarez",
-    email: "pepita@gmail.com",
+    names: formValues?.names || "",
+    lastnames: formValues?.lastNames || "",
+    email: formValues?.email || "",
   };
 
   const [enableEdit, setEnableEdit] = useState(false);

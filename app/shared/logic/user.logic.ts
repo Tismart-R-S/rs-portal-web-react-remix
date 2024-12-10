@@ -15,10 +15,8 @@ export namespace UserLogic {
     if (!isAuthenticated) return null;
     if (user) return user;
 
-    const response = await AuthLogic.executeUseCase<UserResponseModel | string>(
-      cookie,
-      route,
-      () => getUserUseCase(token)
+    const response = await AuthLogic.executeUseCase(cookie, route, () =>
+      getUserUseCase(token)
     );
 
     if (!response.ok) return null;

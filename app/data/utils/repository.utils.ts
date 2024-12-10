@@ -46,10 +46,15 @@ namespace RepositoryUtils {
         } as T;
         return response;
       }
+
+      const message = Array.isArray(err.errorMessages)
+        ? err.errorMessages.join("|")
+        : (err.errorMessages as string);
+
       response = {
         ok: false,
         statusCode: err.statusCode,
-        data: err.errorMessages,
+        data: message,
       } as T;
     } else {
       response = {

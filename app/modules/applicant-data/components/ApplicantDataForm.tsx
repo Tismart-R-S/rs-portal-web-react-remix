@@ -26,18 +26,18 @@ interface ApplicantDataFormProps {
 
 const ApplicantDataForm = ({ formValues }: ApplicantDataFormProps) => {
   const initialValues: ApplicantDataFormValidationType = {
-    country: formValues!.country ?? "",
-    city: formValues!.city ?? "",
-    documentType: formValues!.documentType ?? "",
-    documentNumber: formValues!.documentNumber ?? "",
-    expectedSalary: formValues!.expectedSalary ?? 0,
-    phoneNumber: formValues!.phoneNumber ?? "",
-    targetProfiles: formValues!.targetProfiles ?? [],
-    yearsExperience: formValues!.yearsExperience ?? "",
-    technologies: formValues!.technologies ?? [],
-    seniority: formValues!.seniority ?? "",
-    workModes: formValues!.workModes ?? [""],
-    englishLevel: formValues!.englishLevel ?? "",
+    country: formValues?.country || "",
+    city: formValues?.city || "",
+    documentType: formValues?.documentType || "",
+    documentNumber: formValues?.documentNumber || "",
+    expectedSalary: formValues?.expectedSalary || 0,
+    phoneNumber: formValues?.phoneNumber || "",
+    targetProfiles: formValues?.targetProfiles || [],
+    yearsExperience: formValues?.yearsExperience || "",
+    technologies: formValues?.technologies || [],
+    seniority: formValues?.seniority || "",
+    workModes: formValues?.workModes || [],
+    englishLevel: formValues?.englishLevel || "",
   };
 
   return (

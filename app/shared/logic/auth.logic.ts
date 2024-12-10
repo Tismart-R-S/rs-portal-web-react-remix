@@ -5,11 +5,6 @@ import { SessionLogic } from "./session.logic";
 import { RefreshTokenResponseModel } from "@data/models/refresh-token.model";
 
 namespace AuthLogic {
-  interface AuthUseCaseResponse<T> {
-    ok: boolean;
-    data: T;
-  }
-
   export const refreshSessionToken = async (cookie: string, route: string) => {
     const { refreshToken, isAuthenticated } = await SessionProvider.get(cookie);
 
@@ -27,23 +22,21 @@ namespace AuthLogic {
     await SessionLogic.saveToken(cookie, newToken, route); // guarda token y redirigue
   };
 
-  export const executeUseCase = async <T>(
+  export const executeUseCase = async <D>(
     cookie: string,
     route: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    func: () => Promise<BaseResponse<any>>
-  ): Promise<AuthUseCaseResponse<T>> => {
+    func: () => Promise<BaseResponse<D>>
+  ): Promise<BaseResponse<D>> => {
     const response = await func();
 
     console.log("------executeUseCase------");
     console.log({ response });
 
-    if (response.statusCode === 403 || response.statusCode === 401)
+    if ([401, 403].includes(response.statusCode))
       await refreshSessionToken(cookie, route);
 
-    const { data, ok } = response;
-
-    return { data, ok };
+    return response;
   };
 
   export const isAuthenticated = async (cookie: string) => {

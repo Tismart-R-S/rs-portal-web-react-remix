@@ -24,8 +24,6 @@ export namespace SessionLogic {
     console.log("------authenticate------");
     const { isAuthenticated } = session;
 
-    console.log({ isAuthenticated, currentRoute, redirectTo, session });
-
     const pageIfNotAuthenticated = ["/register", "/login"];
     const pageOnlyIfAuthenticated = ["/profile", "/applicant-data"];
 
@@ -71,7 +69,7 @@ export namespace SessionLogic {
     route = "/"
   ) => {
     console.log("------flashMessage------");
-    console.log(route);
+
     const session = await SessionProvider.flashMessage(
       cookie,
       "flash_message",

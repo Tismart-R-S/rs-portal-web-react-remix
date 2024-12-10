@@ -35,9 +35,9 @@ namespace EmailVerifiedLogic {
     const path = new URL(request.url).pathname;
     const token = await SessionProvider.getByLabel(cookie, "token");
 
-    const { data, ok } = await AuthLogic.executeUseCase<
-      SendVerifByEmailResponseModel | string
-    >(cookie, path, () => sendVerificationByEmailUseCase(token));
+    const { data, ok } = await AuthLogic.executeUseCase(cookie, path, () =>
+      sendVerificationByEmailUseCase(token)
+    );
 
     const message = ok
       ? (data as SendVerifByEmailResponseModel).message
