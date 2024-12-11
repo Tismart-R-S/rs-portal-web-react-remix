@@ -90,13 +90,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   // get flash message from session
   const flashMessage = await RootLogic.getFlashMessage(request);
-  console.log({ flashMessage });
 
   if (flashMessage !== null) {
     const { data: message, newSession } = flashMessage;
 
     return data(
-      { user: null, isAuthenticated, message },
+      { user, isAuthenticated, message },
       {
         headers: {
           "Set-Cookie": newSession,

@@ -20,7 +20,6 @@ export const meta: MetaFunction = () => {
 };
 
 const mutation = makeDomainFunction(profileFormValidator)(async (values) => {
-  console.log(values);
   return values;
 });
 

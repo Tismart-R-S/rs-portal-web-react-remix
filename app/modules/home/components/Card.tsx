@@ -1,7 +1,7 @@
-import { Link } from '@remix-run/react';
-import { ExternalLink } from 'lucide-react';
+import { Link } from "@remix-run/react";
+import { ExternalLink } from "lucide-react";
 
-import { Button } from '@ui/button';
+import { Button } from "@ui/button";
 import {
   Card as CardShadcn,
   CardContent,
@@ -9,22 +9,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@ui/card';
+} from "@ui/card";
+import { VacanciesUCResponse } from "~/data/interfaces/vacancy.interface";
 
-const Card = () => {
+interface CardProps {
+  vacancy: VacanciesUCResponse;
+}
+
+const Card = ({ vacancy }: CardProps) => {
   return (
     <CardShadcn className="max-w-5xl">
       <CardHeader className="pb-3">
-        <CardTitle className="text-2xl">Backend .Net Junior</CardTitle>
-        <CardDescription>Cod. BP001</CardDescription>
+        <CardTitle className="text-2xl">{vacancy.jobPositionName}</CardTitle>
+        <CardDescription>Cod. {vacancy.rqCode}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi
-          officiis fugiat incidunt molestiae tempora esse quisquam quod unde
-          accusamus temporibus ducimus sapiente saepe similique sit possimus
-          optio laborum, minima non?
-        </p>
+        <p className="line-clamp-3">{vacancy.introduction}</p>
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button
@@ -32,7 +32,7 @@ const Card = () => {
           variant="secondary"
           className="border-solid border-2 border-gray-300"
         >
-          <Link to="/vacancy/123">
+          <Link to={`/vacancy/${vacancy.rqCode}`}>
             Postula aquí <ExternalLink />
           </Link>
         </Button>

@@ -1,15 +1,19 @@
-import type { MetaFunction } from '@remix-run/node';
+import { data, MetaFunction } from "@remix-run/node";
 
-import { Card } from '@modules/home/components';
+import { Card } from "@modules/home/components";
+import VacancyLogic from "~/shared/logic/vacancy.logic";
+import { useLoaderData } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'Home | R&S' },
-    { name: 'description', content: 'Nuevas vacantes en Tismart!' },
+    { title: "Home | R&S" },
+    { name: "description", content: "Nuevas vacantes en Tismart!" },
   ];
 };
 
 export default function Index() {
+  const { vacancies } = useLoaderData<typeof loader>();
+
   return (
     <div>
       <div>
@@ -24,10 +28,16 @@ export default function Index() {
       </div>
       {/* Cards */}
       <div className="flex flex-col gap-9">
-        {[1, 2, 3].map((card) => (
-          <Card key={card} />
-        ))}
+        {vacancies &&
+          vacancies.data.map((vacancy) => (
+            <Card key={vacancy.rqCode} vacancy={vacancy} />
+          ))}
       </div>
     </div>
   );
+}
+
+export async function loader() {
+  const vacancies = await VacancyLogic.getVacancies();
+  return data({ vacancies });
 }

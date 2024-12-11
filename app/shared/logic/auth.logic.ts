@@ -25,7 +25,6 @@ namespace AuthLogic {
   export const executeUseCase = async <D>(
     cookie: string,
     route: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     func: () => Promise<BaseResponse<D>>
   ): Promise<BaseResponse<D>> => {
     const response = await func();

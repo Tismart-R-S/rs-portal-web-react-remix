@@ -19,6 +19,16 @@ const ApplicationButton = ({ errors = false }: { errors?: boolean }) => {
   );
 };
 
+const CommonApplicationButton = () => {
+  return (
+    <Button asChild>
+      <Link to="/login">
+        Postularse <ArrowUpRight />
+      </Link>
+    </Button>
+  );
+};
+
 const WarningMessage = () => {
   return (
     <div className="flex items-center gap-2">
@@ -28,11 +38,16 @@ const WarningMessage = () => {
       <p className="text-sm text-red-500">
         Llena tu ficha de postulación en tu perfil antes de postular
         <Button variant="link" className="text-sm p-1 h-full">
-          <Link to="/profile">Click aquí</Link>
+          <Link to="/applicant-data">Click aquí</Link>
         </Button>
       </p>
     </div>
   );
 };
 
-export { ApplicationSentButton, ApplicationButton, WarningMessage };
+export {
+  CommonApplicationButton,
+  ApplicationSentButton,
+  ApplicationButton,
+  WarningMessage,
+};
