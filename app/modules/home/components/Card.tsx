@@ -24,7 +24,10 @@ const Card = ({ vacancy }: CardProps) => {
         <CardDescription>Cod. {vacancy.rqCode}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="line-clamp-3">{vacancy.introduction}</p>
+        <div
+          className="line-clamp-3"
+          dangerouslySetInnerHTML={{ __html: vacancy.introduction }}
+        />
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button
@@ -42,3 +45,4 @@ const Card = ({ vacancy }: CardProps) => {
 };
 
 export default Card;
+

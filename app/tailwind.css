@@ -74,4 +74,19 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .list-margin {
+    @apply ml-[-18px];
+  }
+  .list-margin ul {
+    @apply list-inside;
+  }
+  .list-margin ul li {
+    @apply ml-5;
+  }
+  .list-margin ul li::marker {
+    margin: 0 !important
+  }
+  .list-margin ul li p {
+    @apply inline;
+  }
 }

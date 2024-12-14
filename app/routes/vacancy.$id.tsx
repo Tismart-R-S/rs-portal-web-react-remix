@@ -24,15 +24,15 @@ export default function Vacancy() {
     useLoaderData<typeof loader>();
 
   return (
-    <div>
+    <div className="flex flex-col gap-5">
       <div>
-        <div className="flex justify-center items-end gap-2">
+        <div className="flex justify-center items-end gap-2 mb-10">
           <h1 className="text-2xl font-semibold">{vacancy.jobPositionName}</h1>
           <span className="text-sm text-muted-foreground inline-block pb-0.5">
             Cod. {vacancy.rqCode}
           </span>
         </div>
-        <p className="my-8 text-lg">{vacancy.introduction}</p>
+        <div dangerouslySetInnerHTML={{ __html: vacancy.introduction }} />
       </div>
       <div className="flex flex-col gap-9">
         {/* Conocimientos */}
@@ -40,29 +40,27 @@ export default function Vacancy() {
           <h5 className="text-md font-semibold pb-3">
             Conocimientos necesarios
           </h5>
-          <ul className="list-disc list-inside">
-            {vacancy.knowledge.map((v, i) => (
-              <li key={i}>{v}</li>
-            ))}
-          </ul>
+          <div
+            className="pl-5"
+            dangerouslySetInnerHTML={{ __html: vacancy.knowledge }}
+          />
         </div>
         {/* Requisitos */}
         <div>
           <h5 className="text-md font-semibold pb-3">Funciones del puesto</h5>
-          <ul className="list-disc list-inside">
-            {vacancy.jobFunctions.map((v, i) => (
-              <li key={i}>{v}</li>
-            ))}
-          </ul>
+
+          <div
+            className="pl-5"
+            dangerouslySetInnerHTML={{ __html: vacancy.jobFunctions }}
+          />
         </div>
         {/* Beneficios */}
         <div>
           <h5 className="text-md font-semibold pb-3">Beneficios</h5>
-          <ul className="list-disc list-inside">
-            {vacancy.benefits.map((v, i) => (
-              <li key={i}>{v}</li>
-            ))}
-          </ul>
+          <div
+            className="pl-5"
+            dangerouslySetInnerHTML={{ __html: vacancy.benefits }}
+          />
         </div>
         {isAuthenticated ? (
           <ApplicationSection
