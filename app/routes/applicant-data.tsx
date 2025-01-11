@@ -14,6 +14,7 @@ import { applicantDataFormValidator } from "~/modules/applicant-data/utils/appli
 import { ApplicantDataLogic } from "~/modules/applicant-data/logic/applicant-data.logic";
 import { useLoaderData } from "@remix-run/react";
 import { ApplicantDataFormValidationType } from "~/modules/applicant-data/types/applicant-data-form.type";
+import { SessionProvider } from "~/providers/session.provider";
 
 export const meta: MetaFunction = () => {
   return [
@@ -46,12 +47,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const applicantData = await ApplicantDataLogic.applicantData(request);
+  const cookie = request.headers.get("cookie") || "";
+  const { token } = await SessionProvider.get(cookie);
 
-  return data({ applicantData });
+  return data({ applicantData, apiUrl: process.env.API_RECRUITMENT!, token });
 }
 
 export default function PostulationData() {
-  const { applicantData } = useLoaderData<typeof loader>();
+  const { applicantData, apiUrl, token } = useLoaderData<typeof loader>();
 
   return (
     <div>
@@ -61,7 +64,7 @@ export default function PostulationData() {
       <div className="flex flex-col gap-10 my-8">
         <ApplicantDataForm formValues={applicantData} />
         <hr />
-        <ResumeSection />
+        <ResumeSection apiUrl={apiUrl} token={token} fileName={applicantData!.resumeFileName || ""} />
       </div>
     </div>
   );

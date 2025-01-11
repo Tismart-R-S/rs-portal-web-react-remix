@@ -12,6 +12,8 @@ export interface ApplicantDataModel {
   seniority: string;
   workModes: string[];
   englishLevel: string;
+  resumeFileName: string | null;
+  resumeUrl: string | null;
 }
 
 export interface ApplicantUpdateRequestModel {

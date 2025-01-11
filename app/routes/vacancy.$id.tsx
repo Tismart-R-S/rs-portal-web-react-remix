@@ -11,6 +11,9 @@ import { useLoaderData } from "@remix-run/react";
 import { CommonApplicationButton } from "~/modules/vacancy/components/application-section.components";
 import { SessionProvider } from "~/providers/session.provider";
 import { ApplicantDataLogic } from "~/modules/applicant-data/logic/applicant-data.logic";
+import { toast } from "sonner";
+import { useState } from "react";
+import { VacancyApplicationLogic } from "~/modules/vacancy/logic/vacancy-application.logic";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,8 +23,35 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Vacancy() {
-  const { vacancy, isAuthenticated, hasApplicantData } =
-    useLoaderData<typeof loader>();
+  const {
+    vacancy,
+    isAuthenticated,
+    hasApplicantData,
+    token,
+    apiRecruitmentUrl,
+    rqCode,
+  } = useLoaderData<typeof loader>();
+
+  const [applied, setApplied] = useState<boolean>(false);
+
+  const handleVacancyApplication = async () => {
+    console.log("Entro", apiRecruitmentUrl, token);
+
+    const success = await VacancyApplicationLogic.vacancyApplication(
+      token,
+      rqCode,
+      apiRecruitmentUrl
+    );
+    if (success) {
+      toast.success("Postulación enviada con éxito!", { richColors: true });
+      setApplied(true);
+    } else {
+      toast.error(
+        "Hubo un error al enviar la postulación, por favor recargue la página e intente nuevamente.",
+        { richColors: true }
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -64,8 +94,9 @@ export default function Vacancy() {
         </div>
         {isAuthenticated ? (
           <ApplicationSection
+            handleVacancyApplication={handleVacancyApplication}
             hasApplicantData={hasApplicantData}
-            applied={false}
+            applied={applied}
           />
         ) : (
           <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
@@ -78,16 +109,23 @@ export default function Vacancy() {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const qrCode = params.id || "";
+  const rqCode = params.id || "";
   const cookie = request.headers.get("cookie") || "";
-  const { isAuthenticated } = await SessionProvider.get(cookie);
+  const { isAuthenticated, token } = await SessionProvider.get(cookie);
 
-  const vacancy = await VacancyLogic.getVacancyByCode(qrCode);
+  const vacancy = await VacancyLogic.getVacancyByCode(rqCode);
   const applicantData = await ApplicantDataLogic.applicantData(request);
 
   const hasApplicantData = !!applicantData;
 
   if (vacancy === null) throw redirect("/");
 
-  return data({ vacancy, isAuthenticated, hasApplicantData });
+  return data({
+    vacancy,
+    isAuthenticated,
+    hasApplicantData,
+    token,
+    rqCode,
+    apiRecruitmentUrl: process.env.API_RECRUITMENT!,
+  });
 }

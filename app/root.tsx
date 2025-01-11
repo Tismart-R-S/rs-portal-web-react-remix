@@ -15,6 +15,7 @@ import { Header } from "@shared/layouts";
 import { RootLogic } from "@modules/index/logic/root.logic";
 import { Alert } from "@shared/components";
 import { useEffect, useState } from "react";
+import { Toaster } from "sonner";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -73,6 +74,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <Outlet />
     </QueryClientProvider>
   );

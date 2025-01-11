@@ -11,3 +11,5 @@ export type GetAllVacanciesResponse = BaseResponse<
 export type GetVacancyByRqCodeResponse = BaseResponse<
   VacancyResponseModel | string
 >;
+
+export type VacancyApplicationResponse = BaseResponse<null | string>;

@@ -11,9 +11,15 @@ const ApplicationSentButton = () => {
   );
 };
 
-const ApplicationButton = ({ errors = false }: { errors?: boolean }) => {
+const ApplicationButton = ({
+  errors = false,
+  handleVacancyApplication,
+}: {
+  errors?: boolean;
+  handleVacancyApplication: () => Promise<void>;
+}) => {
   return (
-    <Button disabled={errors}>
+    <Button disabled={errors} onClick={handleVacancyApplication}>
       Postularse <ArrowUpRight />
     </Button>
   );
