@@ -2,16 +2,19 @@ import {
   ApplicationButton,
   ApplicationSentButton,
   WarningMessage,
+  WarningMessageResume,
 } from "./application-section.components";
 
 interface ApplicationSectionProps {
   applied: boolean;
   hasApplicantData: boolean;
+  hasResume:boolean;
   handleVacancyApplication: () => Promise<void>;
 }
 
 const ApplicationSection = ({
   hasApplicantData,
+  hasResume,
   applied,
   handleVacancyApplication,
 }: ApplicationSectionProps) => {
@@ -22,10 +25,11 @@ const ApplicationSection = ({
       ) : (
         <ApplicationButton
           handleVacancyApplication={handleVacancyApplication}
-          errors={!hasApplicantData}
+          errors={!hasApplicantData || !hasResume}
         />
       )}
       {!hasApplicantData && <WarningMessage />}
+      {!hasResume && <WarningMessageResume />}
     </div>
   );
 };

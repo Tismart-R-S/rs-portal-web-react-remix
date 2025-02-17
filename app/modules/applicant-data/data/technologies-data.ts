@@ -19,4 +19,12 @@ export const technologiesList = [
     value: "net",
     label: "Net",
   },
+  {
+    value: "aws",
+    label: "Aws"
+  },
+  {
+    value: "python",
+    label: "Python"
+  }
 ];

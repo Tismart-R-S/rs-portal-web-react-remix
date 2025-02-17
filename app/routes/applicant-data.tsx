@@ -64,7 +64,11 @@ export default function PostulationData() {
       <div className="flex flex-col gap-10 my-8">
         <ApplicantDataForm formValues={applicantData} />
         <hr />
-        <ResumeSection apiUrl={apiUrl} token={token} fileName={applicantData!.resumeFileName || ""} />
+        <ResumeSection
+          apiUrl={apiUrl}
+          token={token}
+          fileName={applicantData ? applicantData.resumeFileName : ""}
+        />
       </div>
     </div>
   );

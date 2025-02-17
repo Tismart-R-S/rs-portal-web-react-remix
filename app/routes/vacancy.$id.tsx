@@ -26,6 +26,7 @@ export default function Vacancy() {
   const {
     vacancy,
     isAuthenticated,
+    hasResume,
     hasApplicantData,
     token,
     apiRecruitmentUrl,
@@ -96,6 +97,7 @@ export default function Vacancy() {
           <ApplicationSection
             handleVacancyApplication={handleVacancyApplication}
             hasApplicantData={hasApplicantData}
+            hasResume={hasResume}
             applied={applied}
           />
         ) : (
@@ -117,6 +119,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const applicantData = await ApplicantDataLogic.applicantData(request);
 
   const hasApplicantData = !!applicantData;
+  const hasResume = !!applicantData?.resumeFileName;
 
   if (vacancy === null) throw redirect("/");
 
@@ -124,6 +127,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     vacancy,
     isAuthenticated,
     hasApplicantData,
+    hasResume,
     token,
     rqCode,
     apiRecruitmentUrl: process.env.API_RECRUITMENT!,
