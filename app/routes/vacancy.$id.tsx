@@ -31,9 +31,10 @@ export default function Vacancy() {
     token,
     apiRecruitmentUrl,
     rqCode,
+    isApplied,
   } = useLoaderData<typeof loader>();
 
-  const [applied, setApplied] = useState<boolean>(false);
+  const [applied, setApplied] = useState<boolean>(isApplied);
 
   const handleVacancyApplication = async () => {
     console.log("Entro", apiRecruitmentUrl, token);
@@ -111,16 +112,25 @@ export default function Vacancy() {
 }
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  let isApplied = false;
   const rqCode = params.id || "";
   const cookie = request.headers.get("cookie") || "";
   const { isAuthenticated, token } = await SessionProvider.get(cookie);
 
   const vacancy = await VacancyLogic.getVacancyByCode(rqCode);
+
   const applicantData = await ApplicantDataLogic.applicantData(request);
+
+  if (isAuthenticated)
+    isApplied = await ApplicantDataLogic.verifyApplication(
+      request,
+      rqCode
+    );
 
   const hasApplicantData = !!applicantData;
   const hasResume = !!applicantData?.resumeFileName;
 
+  console.log("isApplied", isApplied);
   if (vacancy === null) throw redirect("/");
 
   return data({
@@ -130,6 +140,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     hasResume,
     token,
     rqCode,
+    isApplied,
     apiRecruitmentUrl: process.env.API_RECRUITMENT!,
   });
 }

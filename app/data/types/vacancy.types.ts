@@ -12,4 +12,6 @@ export type GetVacancyByRqCodeResponse = BaseResponse<
   VacancyResponseModel | string
 >;
 
+export type verifyApplicationResponse = BaseResponse<null>;
+
 export type VacancyApplicationResponse = BaseResponse<null | string>;
