@@ -4,6 +4,7 @@ import { SessionProvider } from "~/providers/session.provider";
 import AuthLogic from "~/shared/logic/auth.logic";
 import { ApplicantDataFormValidationType } from "../types/applicant-data-form.type";
 import updateApplicantDataUseCase from "~/data/usecases/applicant-data/update-applicant-data.usecase";
+import verifyApplicationUseCase from "~/data/usecases/vacancy/verify-application.usecase";
 
 export namespace ApplicantDataLogic {
   export const applicantData = async (request: Request) => {
@@ -34,5 +35,22 @@ export namespace ApplicantDataLogic {
     );
 
     console.log("applicantDataLogic.save response", response.data);
+  };
+
+  export const verifyApplication = async (
+    request: Request,
+    rqCode: string
+  ): Promise<boolean> => {
+    const cookie = request.headers.get("cookie") || "";
+    const session = await SessionProvider.get(cookie);
+    const path = new URL(request.url).pathname;
+
+    const response = await AuthLogic.executeUseCase(cookie, path, () =>
+      verifyApplicationUseCase(rqCode, session.token)
+    );
+
+    if (response.statusCode === 200) return true;
+
+    return false;
   };
 }

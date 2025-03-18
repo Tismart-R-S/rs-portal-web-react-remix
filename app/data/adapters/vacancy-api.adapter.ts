@@ -36,6 +36,25 @@ namespace VacancyApiAdapter {
 
     return { ok: true, statusCode: response.status, data: response.data.data };
   }
+
+  export async function verifyApplication(
+    rqCode: string,
+    token: string
+  ): Promise<BaseResponse<null>> {
+    const response = await RecruitmentClient.get<void>(
+      `/application/verify-application/${rqCode}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return {
+      ok: true,
+      statusCode: response.status,
+      data: null,
+    };
+  }
 }
 
 export default VacancyApiAdapter;
