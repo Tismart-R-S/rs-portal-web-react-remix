@@ -115,7 +115,7 @@ const ApplicantDataForm = ({ formValues }: ApplicantDataFormProps) => {
                             <SelectContent>
                               <SelectItem value="DNI">DNI</SelectItem>
                               <SelectItem value="Carnet de extranjería">
-                                Carnet de extrangería
+                                Carnet de extranjería
                               </SelectItem>
                             </SelectContent>
                           </Select>
