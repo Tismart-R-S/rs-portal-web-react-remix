@@ -145,6 +145,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     token,
     rqCode,
     isApplied,
-    apiRecruitmentUrl: process.env.API_RECRUITMENT!,
+    apiRecruitmentUrl:
+      process.env.API_RECRUITMENT ?? (context as Context).API_RECRUITMENT!,
   });
 }
