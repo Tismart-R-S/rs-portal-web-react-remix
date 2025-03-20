@@ -9,8 +9,8 @@ namespace RepositoryUtils {
     error: AxiosError<ApiAuthErrorModel> | unknown
   ) => {
     let response;
-    if (isAxiosError(error)) {
-      const err = error.response!.data as ApiAuthErrorModel;
+    if (isAxiosError(error) && error.response) {
+      const err = error.response.data as ApiAuthErrorModel;
 
       const message = Array.isArray(err.message)
         ? err.message.join("|")
@@ -36,8 +36,8 @@ namespace RepositoryUtils {
     error: AxiosError<ApiRecruitmentResponseModel<null>> | unknown
   ) => {
     let response;
-    if (isAxiosError(error)) {
-      const err = error.response!.data as ApiRecruitmentResponseModel<null>;
+    if (isAxiosError(error) && error.response) {
+      const err = error.response.data as ApiRecruitmentResponseModel<null>;
       if (err.statusCode === 401) {
         response = {
           ok: false,

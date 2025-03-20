@@ -1,12 +1,13 @@
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
+  useRouteLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { data, redirect } from "@remix-run/node";
 import "./tailwind.css";
@@ -16,6 +17,7 @@ import { RootLogic } from "@modules/index/logic/root.logic";
 import { Alert } from "@shared/components";
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
+import { Context } from "./shared/interface/global.interface";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -33,7 +35,7 @@ export const links: LinksFunction = () => [
 const queryClient = new QueryClient();
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { user, message } = useLoaderData<typeof loader>();
+  const { user, message } = useRouteLoaderData<typeof loader>("root") || {};
   const [showAlert, setShowAlert] = useState(false);
 
   const dismissAlert = () => setShowAlert(false);
@@ -80,10 +82,10 @@ export default function App() {
   );
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request, context }: LoaderFunctionArgs) {
   const isAuthenticated = await RootLogic.authenticate(request);
 
-  const user = await RootLogic.userData(request);
+  const user = await RootLogic.userData(request, context as Context);
   const path = new URL(request.url).pathname;
 
   if (user?.isVerified === false && path !== "/email-verified") {

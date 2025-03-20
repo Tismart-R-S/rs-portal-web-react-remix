@@ -1,8 +1,10 @@
 import { data, MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 import { Card } from "@modules/home/components";
 import VacancyLogic from "~/shared/logic/vacancy.logic";
 import { useLoaderData } from "@remix-run/react";
+import { Context } from "~/shared/interface/global.interface";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,7 +39,7 @@ export default function Index() {
   );
 }
 
-export async function loader() {
-  const vacancies = await VacancyLogic.getVacancies();
+export async function loader({ context }: LoaderFunctionArgs) {
+  const vacancies = await VacancyLogic.getVacancies(context as Context);
   return data({ vacancies });
 }

@@ -1,20 +1,14 @@
-import {
-  redirect,
-  json,
-  data,
-  ActionFunctionArgs,
-  // LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import { redirect, json, data, MetaFunction } from "@remix-run/node";
 import { makeDomainFunction } from "domain-functions";
 import { createFormAction } from "remix-forms";
+import { ActionFunctionArgs } from "@remix-run/cloudflare";
 
 import { Card as CardShadcn, CardHeader, CardTitle } from "@ui/card";
 import { CenterContent } from "@shared/components";
-// import { LoginLogic } from "~/modules/login/logic/login.logic";
 import { RegisterForm } from "~/modules/register/components";
 import { RegisterLogic } from "~/modules/register/logic/register.logic";
 import { registerFormValidator } from "~/modules/register/utils/register-form.validator";
+import { Context } from "~/shared/interface/global.interface";
 
 export const meta: MetaFunction = () => {
   return [
@@ -47,15 +41,16 @@ export default function Register() {
   );
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
   await formAction({
     request,
     schema: registerFormValidator,
     mutation,
     beforeSuccess: async () => {
-      await RegisterLogic.register(request);
+      await RegisterLogic.register(request, context as Context);
     },
   });
 
   return data({});
 }
+

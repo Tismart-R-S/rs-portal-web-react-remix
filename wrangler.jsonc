@@ -1,0 +1,26 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rs-portal",
+  "main": "./server.js",
+  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "2025-03-17",
+  "assets": {
+    "directory": "./build/client",
+    "binding": "ASSETS"
+  },
+  "env": {
+    "qa": {
+      "name": "rs-portal-qa",
+      "vars": {
+        "API_AUTH": "https://reclutamiento-auth-service.onrender.com/",
+        "API_RECRUITMENT": "https://rs-recruitment-service-qa.onrender.com/api",
+        "NODE_ENV": "production"
+        // SESSION_KEY is a cloudflare secret
+      }
+    }
+  }
+}

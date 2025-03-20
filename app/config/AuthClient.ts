@@ -1,10 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from "axios";
 
-const AuthClient = axios.create({
-  baseURL: process.env.API_AUTH,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+export function getAuthClient(apiUrl: string): AxiosInstance {
+  return axios.create({
+    baseURL: apiUrl,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
 
-export default AuthClient;

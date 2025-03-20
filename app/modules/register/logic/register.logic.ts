@@ -1,8 +1,9 @@
 import { UserLogic } from "@shared/logic/user.logic";
 import { RegisterRequestModel } from "@data/models/register.model";
+import { Context } from "~/shared/interface/global.interface";
 
 export namespace RegisterLogic {
-  export const register = async (request: Request) => {
+  export const register = async (request: Request, context: Context) => {
     const cookie = request.headers.get("cookie") || "";
     const formData = await request.formData();
 
@@ -18,6 +19,7 @@ export namespace RegisterLogic {
       redirect: "/login",
     };
 
-    await UserLogic.register(cookie, values, route);
+    await UserLogic.register(cookie, values, route, context);
   };
 }
+

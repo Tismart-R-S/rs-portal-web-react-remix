@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 
-const RecruitmentClient = axios.create({
-  baseURL: process.env.API_RECRUITMENT,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-export default RecruitmentClient;
+export function getRecruitmentClient(apiUrl: string): AxiosInstance {
+  return axios.create({
+    baseURL: apiUrl,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}

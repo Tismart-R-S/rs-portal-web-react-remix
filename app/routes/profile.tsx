@@ -11,6 +11,7 @@ import { createFormAction } from "remix-forms";
 import { profileFormValidator } from "~/modules/profile/utils/profile-form.validatior";
 import { ProfileLogic } from "~/modules/profile/logic/profile.logic";
 import { useLoaderData } from "@remix-run/react";
+import { Context } from "~/shared/interface/global.interface";
 
 export const meta: MetaFunction = () => {
   return [
@@ -46,8 +47,9 @@ export default function Profile() {
   );
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const profile = await ProfileLogic.getProfile(request);
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const profile = await ProfileLogic.getProfile(request, context as Context);
 
   return data({ profile });
 }
+

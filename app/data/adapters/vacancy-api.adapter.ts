@@ -1,4 +1,4 @@
-import RecruitmentClient from "@config/RecruitmentClient";
+import { getRecruitmentClient } from "@config/RecruitmentClient";
 import {
   ApiRecruitmentResponseModel,
   MetaDataModel,
@@ -8,11 +8,16 @@ import {
   VacancyResponseModel,
 } from "../models/vacancy.model";
 import { BaseResponse } from "../interfaces/global.interface";
+import { Context } from "~/shared/interface/global.interface";
 
 namespace VacancyApiAdapter {
-  export async function getAll(): Promise<
-    BaseResponse<VacanciesResponseModel>
-  > {
+  export async function getAll(
+    context: Context
+  ): Promise<BaseResponse<VacanciesResponseModel>> {
+    const RecruitmentClient = getRecruitmentClient(
+      process.env.API_RECRUITMENT ?? context.API_RECRUITMENT
+    );
+    console.log(RecruitmentClient.getUri());
     const response = await RecruitmentClient.get<
       ApiRecruitmentResponseModel<VacancyResponseModel[]>
     >("/recruitment-form");
@@ -28,8 +33,12 @@ namespace VacancyApiAdapter {
   }
 
   export async function getByRqCode(
-    rqCode: string
+    rqCode: string,
+    context: Context
   ): Promise<BaseResponse<VacancyResponseModel>> {
+    const RecruitmentClient = getRecruitmentClient(
+      process.env.API_RECRUITMENT ?? context.API_RECRUITMENT
+    );
     const response = await RecruitmentClient.get<
       ApiRecruitmentResponseModel<VacancyResponseModel>
     >(`/recruitment-form/published/get-by-rq-code/${rqCode}`);
@@ -39,8 +48,12 @@ namespace VacancyApiAdapter {
 
   export async function verifyApplication(
     rqCode: string,
-    token: string
+    token: string,
+    context: Context
   ): Promise<BaseResponse<null>> {
+    const RecruitmentClient = getRecruitmentClient(
+      process.env.API_RECRUITMENT ?? context.API_RECRUITMENT
+    );
     const response = await RecruitmentClient.get<void>(
       `/application/verify-application/${rqCode}`,
       {

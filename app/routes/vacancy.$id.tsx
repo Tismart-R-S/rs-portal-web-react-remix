@@ -1,9 +1,5 @@
-import {
-  data,
-  LoaderFunctionArgs,
-  redirect,
-  type MetaFunction,
-} from "@remix-run/node";
+import { data, redirect, type MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/cloudflare";
 
 import { ApplicationSection } from "@modules/vacancy/components";
 import VacancyLogic from "~/shared/logic/vacancy.logic";
@@ -14,10 +10,11 @@ import { ApplicantDataLogic } from "~/modules/applicant-data/logic/applicant-dat
 import { toast } from "sonner";
 import { useState } from "react";
 import { VacancyApplicationLogic } from "~/modules/vacancy/logic/vacancy-application.logic";
+import { Context } from "~/shared/interface/global.interface";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: "Developer Junior | R&S" },
+    { title: `${data?.vacancy.jobPositionName}- R&S` },
     { name: "description", content: "Nuevas vacantes en Tismart!" },
   ];
 };
@@ -111,20 +108,27 @@ export default function Vacancy() {
   );
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
   let isApplied = false;
   const rqCode = params.id || "";
   const cookie = request.headers.get("cookie") || "";
   const { isAuthenticated, token } = await SessionProvider.get(cookie);
 
-  const vacancy = await VacancyLogic.getVacancyByCode(rqCode);
+  const vacancy = await VacancyLogic.getVacancyByCode(
+    rqCode,
+    context as Context
+  );
 
-  const applicantData = await ApplicantDataLogic.applicantData(request);
+  const applicantData = await ApplicantDataLogic.applicantData(
+    request,
+    context as Context
+  );
 
   if (isAuthenticated)
     isApplied = await ApplicantDataLogic.verifyApplication(
       request,
-      rqCode
+      rqCode,
+      context as Context
     );
 
   const hasApplicantData = !!applicantData;

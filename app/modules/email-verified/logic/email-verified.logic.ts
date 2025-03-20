@@ -6,6 +6,7 @@ import sendVerificationByEmailUseCase from "@data/usecases/auth/send-verificatio
 import verifyEmailTokenUseCase from "@data/usecases/auth/verify-email-token.usecase";
 import { UserLogic } from "~/shared/logic/user.logic";
 import { SessionLogic } from "~/shared/logic/session.logic";
+import { Context } from "~/shared/interface/global.interface";
 
 namespace EmailVerifiedLogic {
   export const verifyShowPage = async (request: Request) => {
@@ -30,13 +31,16 @@ namespace EmailVerifiedLogic {
     return { isAuthenticated, email_token };
   };
 
-  export const resendVerificationEmail = async (request: Request) => {
+  export const resendVerificationEmail = async (
+    request: Request,
+    context: Context
+  ) => {
     const cookie = request.headers.get("cookie") || "";
     const path = new URL(request.url).pathname;
     const token = await SessionProvider.getByLabel(cookie, "token");
 
     const { data, ok } = await AuthLogic.executeUseCase(cookie, path, () =>
-      sendVerificationByEmailUseCase(token)
+      sendVerificationByEmailUseCase(token, context)
     );
 
     const message = ok
@@ -48,16 +52,17 @@ namespace EmailVerifiedLogic {
 
   export const verifyEmailToken = async (
     request: Request,
-    email_token: string
+    email_token: string,
+    context: Context
   ) => {
     const cookie = request.headers.get("cookie") || "";
     const path = new URL(request.url).pathname;
     const token = await SessionProvider.getByLabel(cookie, "token");
-    const { data, ok } = await verifyEmailTokenUseCase(email_token);
+    const { data, ok } = await verifyEmailTokenUseCase(email_token, context);
 
     // ok and with session
     if (ok && token) {
-      const user = await UserLogic.getDataCommonWay(token);
+      const user = await UserLogic.getDataCommonWay(token, context);
       await SessionLogic.save(cookie, "user", user, "/account-activated");
     }
 
