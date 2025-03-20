@@ -33,7 +33,7 @@ jobs:
       run: ls -la
 
     - name: Install dependencies
-      run: npm install
+      run: npm install --legacy-peer-deps
 
     - name: Deploy to QA
       run: npm run deploy:qa
