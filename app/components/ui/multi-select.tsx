@@ -14,11 +14,7 @@ import { cn } from "../../lib/utils";
 import { Separator } from "./separator";
 import { Button } from "./button";
 import { Badge } from "./badge";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import {
   Command,
   CommandEmpty,
@@ -28,6 +24,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "./command";
+import { ScrollArea } from "./scroll-area";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -291,50 +288,52 @@ export const MultiSelect = React.forwardRef<
             />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup>
-                <CommandItem
-                  key="all"
-                  onSelect={toggleAll}
-                  className="cursor-pointer"
-                >
-                  <div
-                    className={cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                      selectedValues.length === options.length
-                        ? "bg-primary text-primary-foreground"
-                        : "opacity-50 [&_svg]:invisible"
-                    )}
+              <ScrollArea className="h-44 w-auto rounded-md">
+                <CommandGroup>
+                  <CommandItem
+                    key="all"
+                    onSelect={toggleAll}
+                    className="cursor-pointer"
                   >
-                    <CheckIcon className="h-4 w-4" />
-                  </div>
-                  <span>(Select All)</span>
-                </CommandItem>
-                {options.map((option) => {
-                  const isSelected = selectedValues.includes(option.value);
-                  return (
-                    <CommandItem
-                      key={option.value}
-                      onSelect={() => toggleOption(option.value)}
-                      className="cursor-pointer"
-                    >
-                      <div
-                        className={cn(
-                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                          isSelected
-                            ? "bg-primary text-primary-foreground"
-                            : "opacity-50 [&_svg]:invisible"
-                        )}
-                      >
-                        <CheckIcon className="h-4 w-4" />
-                      </div>
-                      {option.icon && (
-                        <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                    <div
+                      className={cn(
+                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                        selectedValues.length === options.length
+                          ? "bg-primary text-primary-foreground"
+                          : "opacity-50 [&_svg]:invisible"
                       )}
-                      <span>{option.label}</span>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
+                    >
+                      <CheckIcon className="h-4 w-4" />
+                    </div>
+                    <span>(Select All)</span>
+                  </CommandItem>
+                  {options.map((option) => {
+                    const isSelected = selectedValues.includes(option.value);
+                    return (
+                      <CommandItem
+                        key={option.value}
+                        onSelect={() => toggleOption(option.value)}
+                        className="cursor-pointer"
+                      >
+                        <div
+                          className={cn(
+                            "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                            isSelected
+                              ? "bg-primary text-primary-foreground"
+                              : "opacity-50 [&_svg]:invisible"
+                          )}
+                        >
+                          <CheckIcon className="h-4 w-4" />
+                        </div>
+                        {option.icon && (
+                          <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                        )}
+                        <span>{option.label}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              </ScrollArea>
               <CommandSeparator />
               <CommandGroup>
                 <div className="flex items-center justify-between">
