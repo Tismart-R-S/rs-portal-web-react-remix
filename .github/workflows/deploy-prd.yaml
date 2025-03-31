@@ -31,7 +31,7 @@ jobs:
 
     - name: 🔽 Descargar archivo de configuración desde Cloudflare R2
       run: |
-        aws s3 cp "s3://rs-config-files-qa/env-portal" .env --endpoint-url=${{ secrets.R2_PRD_ENDPOINT }}
+        aws s3 cp "s3://rs-config-files-prd/env-portal" .env --endpoint-url=${{ secrets.R2_PRD_ENDPOINT }}
 
     - name: 📁 Verificar archivo descargado
       run: ls -la
