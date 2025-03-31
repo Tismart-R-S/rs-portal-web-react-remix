@@ -12,6 +12,11 @@
     "directory": "./build/client",
     "binding": "ASSETS"
   },
+  "vars": {
+    "API_AUTH": "https://seleccion.tismart.com:5000/",
+    "API_RECRUITMENT": "https://seleccion.tismart.com:8080/api",
+    "NODE_ENV": "production"
+  },
   "env": {
     "qa": {
       "name": "rs-portal-qa",

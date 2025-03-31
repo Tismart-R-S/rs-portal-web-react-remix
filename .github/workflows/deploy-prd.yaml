@@ -1,0 +1,43 @@
+name: PRD Deployment
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: PRD
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔄 Limpiar instalación previa
+      run: |
+        rm -rf node_modules package-lock.json
+
+    - name: 🔑 Configurar credenciales de Cloudflare R2
+      run: |
+        mkdir -p ~/.aws
+        echo "[default]" > ~/.aws/credentials
+        echo "aws_access_key_id=${{ secrets.R2_PRD_ACCESS_ID_KEY }}" >> ~/.aws/credentials
+        echo "aws_secret_access_key=${{ secrets.R2_PRD_ACCESS_SECRET_KEY }}" >> ~/.aws/credentials
+
+        echo "[default]" > ~/.aws/config
+        echo "region=auto" >> ~/.aws/config
+        echo "output=json" >> ~/.aws/config
+        echo "endpoint_url=${{ secrets.R2_PRD_ENDPOINT }}" >> ~/.aws/config
+
+    - name: 🔽 Descargar archivo de configuración desde Cloudflare R2
+      run: |
+        aws s3 cp "s3://rs-config-files-qa/env-portal" .env --endpoint-url=${{ secrets.R2_PRD_ENDPOINT }}
+
+    - name: 📁 Verificar archivo descargado
+      run: ls -la
+
+    - name: Install dependencies
+      run: npm install --legacy-peer-deps
+
+    - name: Deploy to PRD
+      run: npm run deploy:prd
