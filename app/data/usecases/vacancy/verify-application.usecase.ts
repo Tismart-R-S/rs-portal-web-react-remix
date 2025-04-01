@@ -1,16 +1,13 @@
 import { BaseResponse } from "~/data/interfaces/global.interface";
 import VacancyRepository from "~/data/repositories/vacancy.repository";
-import { Context } from "~/shared/interface/global.interface";
 
 const verifyApplicationUseCase = async (
   rqCode: string,
-  token: string,
-  context: Context
+  token: string
 ): Promise<BaseResponse<null>> => {
   const response = await VacancyRepository.verifyApplication(
     rqCode,
-    token,
-    context
+    token
   );
   console.log(response);
 

@@ -10,34 +10,40 @@ jobs:
     environment: QA
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: 🔄 Limpiar instalación previa
-      run: |
-        rm -rf node_modules package-lock.json
+      - name: 🔄 Limpiar instalación previa
+        run: |
+          rm -rf node_modules package-lock.json
 
-    - name: 🔑 Configurar credenciales de Cloudflare R2
-      run: |
-        mkdir -p ~/.aws
-        echo "[default]" > ~/.aws/credentials
-        echo "aws_access_key_id=${{ secrets.R2_QA_ACCESS_ID_KEY }}" >> ~/.aws/credentials
-        echo "aws_secret_access_key=${{ secrets.R2_QA_ACCESS_SECRET_KEY }}" >> ~/.aws/credentials
+      - name: 🔑 Configurar credenciales de Cloudflare R2
+        run: |
+          mkdir -p ~/.aws
+          echo "[default]" > ~/.aws/credentials
+          echo "aws_access_key_id=${{ secrets.R2_QA_ACCESS_ID_KEY }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${{ secrets.R2_QA_ACCESS_SECRET_KEY }}" >> ~/.aws/credentials
 
-        echo "[default]" > ~/.aws/config
-        echo "region=auto" >> ~/.aws/config
-        echo "output=json" >> ~/.aws/config
-        echo "endpoint_url=${{ secrets.R2_QA_ENDPOINT }}" >> ~/.aws/config
+          echo "[default]" > ~/.aws/config
+          echo "region=auto" >> ~/.aws/config
+          echo "output=json" >> ~/.aws/config
+          echo "endpoint_url=${{ secrets.R2_QA_ENDPOINT }}" >> ~/.aws/config
 
-    - name: 🔽 Descargar archivo de configuración desde Cloudflare R2
-      run: |
-        aws s3 cp "s3://rs-config-files-qa/env-portal" .env --endpoint-url=${{ secrets.R2_QA_ENDPOINT }}
+      - name: 🔽 Descargar archivo de configuración desde Cloudflare R2
+        run: |
+          aws s3 cp "s3://rs-config-files-qa/env-portal" .env --endpoint-url=${{ secrets.R2_QA_ENDPOINT }}
 
-    - name: 📁 Verificar archivo descargado
-      run: ls -la
+      - name: 📁 Verificar archivo descargado
+        run: ls -la
 
-    - name: Install dependencies
-      run: npm install --legacy-peer-deps
+      - name: 🐳 Iniciar sesión en Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Deploy to QA
-      run: npm run deploy:qa
+      - name: 🔨 Construir y etiquetar imagen Docker
+        run: |
+          VERSION=$(git rev-parse --short HEAD)
+          docker build -t reclutamiento/portal-web:$VERSION .
+          docker tag reclutamiento/portal-web:$VERSION reclutamiento/portal-web:qa
+
+      - name: 📤 Subir imagen a Docker Hub
+        run: docker push reclutamiento/portal-web:qa

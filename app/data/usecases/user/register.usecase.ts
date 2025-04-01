@@ -1,12 +1,10 @@
 import UserRepository from "@data/repositories/user.repository";
 import { RegisterRequestModel } from "~/data/models/register.model";
-import { Context } from "~/shared/interface/global.interface";
 
 const registerUseCase = async (
-  data: RegisterRequestModel,
-  context: Context
+  data: RegisterRequestModel
 ) => {
-  const response = await UserRepository.register(data, context);
+  const response = await UserRepository.register(data);
   return response;
 };
 

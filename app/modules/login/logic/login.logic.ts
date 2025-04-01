@@ -3,11 +3,10 @@ import { StrategyKeys } from "@shared/constants/keys.constants";
 import { LoginResponseModel } from "@data/models/login.model";
 import { SessionLogic } from "@shared/logic/session.logic";
 import { UserLogic } from "@shared/logic/user.logic";
-import { Context } from "~/shared/interface/global.interface";
 
 export namespace LoginLogic {
-  export const login = async (request: Request, context: Context) => {
-    const login = await authenticator(context).authenticate(
+  export const login = async (request: Request) => {
+    const login = await authenticator.authenticate(
       StrategyKeys.auth,
       request
     );
@@ -24,7 +23,7 @@ export namespace LoginLogic {
     }
 
     const access = login.data as LoginResponseModel;
-    const user = await UserLogic.getDataCommonWay(access.accessToken, context);
+    const user = await UserLogic.getDataCommonWay(access.accessToken);
 
     await SessionLogic.logIn(cookie, { ...access, user });
   };

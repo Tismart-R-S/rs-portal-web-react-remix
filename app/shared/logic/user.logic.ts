@@ -5,13 +5,12 @@ import AuthLogic from "./auth.logic";
 import { SessionLogic } from "./session.logic";
 import registerUseCase from "~/data/usecases/user/register.usecase";
 import { RegisterRequestModel } from "~/data/models/register.model";
-import { Context, IRoute } from "../interface/global.interface";
+import { IRoute } from "../interface/global.interface";
 
 export namespace UserLogic {
   export const getData = async (
     cookie: string,
     route = "/",
-    context: Context
   ) => {
     const session = await SessionProvider.get(cookie);
     const { token, isAuthenticated, user } = session;
@@ -20,7 +19,7 @@ export namespace UserLogic {
     if (user) return user;
 
     const response = await AuthLogic.executeUseCase(cookie, route, () =>
-      getUserUseCase(token, context)
+      getUserUseCase(token)
     );
 
     if (!response.ok) return null;
@@ -30,8 +29,8 @@ export namespace UserLogic {
     return response.data as UserResponseModel;
   };
 
-  export const getDataCommonWay = async (token: string, context: Context) => {
-    const response = await getUserUseCase(token, context);
+  export const getDataCommonWay = async (token: string) => {
+    const response = await getUserUseCase(token);
 
     if (!response.ok) return null;
 
@@ -41,10 +40,9 @@ export namespace UserLogic {
   export const register = async (
     cookie: string,
     values: RegisterRequestModel,
-    route: IRoute,
-    context: Context
+    route: IRoute
   ) => {
-    const { ok, data } = await registerUseCase(values, context);
+    const { ok, data } = await registerUseCase(values);
 
     if (!ok) {
       const alert = {

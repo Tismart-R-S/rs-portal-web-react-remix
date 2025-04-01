@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -17,7 +17,6 @@ import { RootLogic } from "@modules/index/logic/root.logic";
 import { Alert } from "@shared/components";
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
-import { Context } from "./shared/interface/global.interface";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -86,10 +85,10 @@ export default function App() {
   );
 }
 
-export async function loader({ request, context }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const isAuthenticated = await RootLogic.authenticate(request);
 
-  const user = await RootLogic.userData(request, context as Context);
+  const user = await RootLogic.userData(request);
   const path = new URL(request.url).pathname;
 
   if (user?.isVerified === false && path !== "/email-verified") {

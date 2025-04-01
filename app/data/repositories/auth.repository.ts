@@ -1,4 +1,3 @@
-import { Context } from "~/shared/interface/global.interface";
 import AuthApiAdapter from "../adapters/auth-api.adapter";
 import { LoginRequestModel } from "../models/login.model";
 import {
@@ -10,12 +9,11 @@ import {
 import RepositoryUtils from "../utils/repository.utils";
 
 namespace AuthRepository {
-  export async function login(data: LoginRequestModel, context: Context) {
+  export async function login(data: LoginRequestModel) {
     let response: LoginResponse;
 
     try {
-      response = await AuthApiAdapter.login(data, context);
-      console.log(response);
+      response = await AuthApiAdapter.login(data);
     } catch (error) {
       response = RepositoryUtils.responseError(error);
     }
@@ -23,11 +21,11 @@ namespace AuthRepository {
     return response;
   }
 
-  export async function refreshToken(refresh_token: string, context: Context) {
+  export async function refreshToken(refresh_token: string) {
     let response: RefreshTokenResponse;
 
     try {
-      response = await AuthApiAdapter.refreshToken(refresh_token, context);
+      response = await AuthApiAdapter.refreshToken(refresh_token);
     } catch (error) {
       response = RepositoryUtils.responseError(error);
     }
@@ -36,13 +34,12 @@ namespace AuthRepository {
   }
 
   export async function sendVerificationByEmail(
-    token: string,
-    context: Context
+    token: string
   ) {
     let response: SendVerifByEmailResponse;
 
     try {
-      response = await AuthApiAdapter.sendVerificationByEmail(token, context);
+      response = await AuthApiAdapter.sendVerificationByEmail(token);
     } catch (error) {
       response = RepositoryUtils.responseError(error);
     }
@@ -51,13 +48,12 @@ namespace AuthRepository {
   }
 
   export async function verifyEmailToken(
-    email_token: string,
-    context: Context
+    email_token: string
   ) {
     let response: VerifyEmailTokenResponse;
 
     try {
-      response = await AuthApiAdapter.verifyEmailToken(email_token, context);
+      response = await AuthApiAdapter.verifyEmailToken(email_token);
     } catch (error) {
       response = RepositoryUtils.responseError(error);
     }

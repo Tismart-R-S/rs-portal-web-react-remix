@@ -5,15 +5,12 @@
     "**/.server/**/*.ts",
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
-    "**/.client/**/*.tsx"
-, "server.js", "server.js"  ],
+    "**/.client/**/*.tsx",
+    "server.js"
+  ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": [
-        "@remix-run/cloudflare",
-        "vite/client",
-        "@cloudflare/workers-types/2023-07-01"
-    ],
+    "types": ["@remix-run/node", "vite/client"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -34,7 +31,7 @@
       "@providers/*": ["./app/providers/*"],
       "@shared/*": ["./app/shared/*"],
       "@ui/*": ["./app/components/ui/*"],
-      "@lib/*": ["./app/lib/*"],
+      "@lib/*": ["./app/lib/*"]
     },
 
     // Vite takes care of building everything, not tsc.

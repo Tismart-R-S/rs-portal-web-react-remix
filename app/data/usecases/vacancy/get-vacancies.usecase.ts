@@ -5,12 +5,10 @@ import {
 } from "~/data/interfaces/vacancy.interface";
 import { VacanciesResponseModel } from "~/data/models/vacancy.model";
 import VacancyRepository from "~/data/repositories/vacancy.repository";
-import { Context } from "~/shared/interface/global.interface";
-
-const getVacanciesUseCase = async (context: Context): Promise<
+const getVacanciesUseCase = async (): Promise<
   BaseResponse<GetVacanciesUCResponse | string>
 > => {
-  const response = await VacancyRepository.getAll(context);
+  const response = await VacancyRepository.getAll();
 
   const { data } = response;
   let newData: GetVacanciesUCResponse | string;

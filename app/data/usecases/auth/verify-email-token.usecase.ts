@@ -1,11 +1,9 @@
 import AuthRepository from "@data/repositories/auth.repository";
-import { Context } from "~/shared/interface/global.interface";
 
 const verifyEmailTokenUseCase = async (
-  email_token: string,
-  context: Context
+  email_token: string
 ) => {
-  const res = await AuthRepository.verifyEmailToken(email_token, context);
+  const res = await AuthRepository.verifyEmailToken(email_token);
   return res;
 };
 

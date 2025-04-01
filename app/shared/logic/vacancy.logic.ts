@@ -4,19 +4,18 @@ import {
   GetVacancyByCodeUCResponse,
 } from "~/data/interfaces/vacancy.interface";
 import getVacancysByCodeUseCase from "~/data/usecases/vacancy/get-vacancy-by-code.usecase";
-import { Context } from "../interface/global.interface";
 
 namespace VacancyLogic {
-  export const getVacancies = async (context: Context) => {
-    const response = await getVacanciesUseCase(context);
+  export const getVacancies = async () => {
+    const response = await getVacanciesUseCase();
 
     if (!response.ok) return null;
 
     return response.data as GetVacanciesUCResponse;
   };
 
-  export const getVacancyByCode = async (rqCode: string, context: Context) => {
-    const response = await getVacancysByCodeUseCase(rqCode, context);
+  export const getVacancyByCode = async (rqCode: string) => {
+    const response = await getVacancysByCodeUseCase(rqCode);
 
     if (!response.ok) return null;
 
