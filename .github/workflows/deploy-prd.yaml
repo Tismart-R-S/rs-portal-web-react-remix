@@ -62,6 +62,29 @@ jobs:
         run: |
           docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
 
-      - name: 🔄 Forzar nueva implementación en Amazon ECS
+      # Obtener la definición actual de tarea ECS y actualizarla con nuevas variables de entorno
+      - name: 🔄 Actualizar variables de entorno en ECS
         run: |
-          aws ecs update-service --cluster RS --service rs-recruitment-service --force-new-deployment
+          TASK_DEFINITION="rs-recruitment-service-task"
+          NEW_TASK_DEF="new-task-definition.json"
+
+          # Descargar la última versión de la definición de tarea
+          aws ecs describe-task-definition --task-definition $TASK_DEFINITION --query taskDefinition > task-definition.json
+
+          # Leer variables del .env y convertirlas en JSON para ECS
+          ENV_VARS=$(cat .env | grep -v '^#' | awk -F= '{print "{\"name\":\""$1"\",\"value\":\""$2"\"}"}' | paste -sd, -)
+
+          # Actualizar el archivo JSON con las nuevas variables
+          jq --argjson env "[$ENV_VARS]" '.containerDefinitions[0].environment = $env' task-definition.json > $NEW_TASK_DEF
+
+          # Registrar la nueva definición de tarea
+          aws ecs register-task-definition --cli-input-json file://$NEW_TASK_DEF
+
+      # Forzar la actualización del servicio en ECS
+      - name: 🚀 Implementar nueva versión en ECS
+        run: |
+          CLUSTER_NAME="RS"
+          SERVICE_NAME="rs-recruitment-service"
+          NEW_TASK_DEF_ARN=$(aws ecs describe-task-definition --task-definition rs-recruitment-service-task --query "taskDefinition.taskDefinitionArn" --output text)
+
+          aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition $NEW_TASK_DEF_ARN --force-new-deployment
