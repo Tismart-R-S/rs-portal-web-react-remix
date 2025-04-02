@@ -61,3 +61,7 @@ jobs:
       - name: 📤 Subir imagen a Amazon ECR
         run: |
           docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
+
+      - name: 🔄 Forzar nueva implementación en Amazon ECS
+        run: |
+          aws ecs update-service --cluster RS --service rs-recruitment-service --force-new-deployment
