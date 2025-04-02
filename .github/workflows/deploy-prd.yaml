@@ -47,6 +47,10 @@ jobs:
           echo "region=us-east-1" >> ~/.aws/config
           echo "output=json" >> ~/.aws/config
 
+      - name: 🔑 Autenticarse en Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 919912553755.dkr.ecr.us-east-1.amazonaws.com
+
       - name: 🔨 Construir y etiquetar imagen Docker
         run: |
           VERSION=$(git rev-parse --short HEAD || echo "latest")
