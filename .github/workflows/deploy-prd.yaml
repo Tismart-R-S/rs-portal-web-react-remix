@@ -17,7 +17,7 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
 
-      - name: 🔑 Configurar credenciales de Cloudflare R2
+      - name: 🔑 Configurar credenciales de AWS CLI para Cloudflare R2
         run: |
           mkdir -p ~/.aws
           echo "[default]" > ~/.aws/credentials
@@ -36,7 +36,7 @@ jobs:
       - name: 📁 Verificar archivo descargado
         run: ls -la
 
-      - name: 🔐 Configurar credenciales de AWS
+      - name: 🔐 Configurar credenciales de AWS CLI
         run: |
           mkdir -p ~/.aws
           echo "[default]" > ~/.aws/credentials
