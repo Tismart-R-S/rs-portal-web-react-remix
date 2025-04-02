@@ -50,8 +50,9 @@ jobs:
       - name: 🔨 Construir y etiquetar imagen Docker
         run: |
           VERSION=$(git rev-parse --short HEAD)
+          echo "VERSION=$VERSION"
           docker build -t rs:$VERSION .
-          docker tag rs:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs:prd
+          docker tag rs:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs:$VERSION
           docker tag rs:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs:latest
 
       - name: 📤 Subir imagen a Amazon ECR
