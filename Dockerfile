@@ -4,7 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copiar archivos esenciales antes para aprovechar caché
-COPY package.json package-lock.json ./
+COPY package.json ./
 
 # Instalar solo dependencias necesarias para construir
 RUN npm install
