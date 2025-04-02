@@ -16,6 +16,13 @@ jobs:
       - name: 🔄 Limpiar instalación previa
         run: |
           rm -rf node_modules package-lock.json
+      
+      - name: 🔐 Configurar credenciales de AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: 🔑 Configurar credenciales de Cloudflare R2
         run: |
@@ -35,15 +42,9 @@ jobs:
 
       - name: 📁 Verificar archivo descargado
         run: ls -la
-      
-      - name: 🔄 Instalar AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
 
       - name: 🔐 Autenticarse en Amazon ECR
-        run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 919912553755.dkr.ecr.us-east-1.amazonaws.com
+        uses: aws-actions/amazon-ecr-login@v1
 
       - name: 🔨 Construir y etiquetar imagen Docker
         run: |
