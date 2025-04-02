@@ -49,7 +49,7 @@ jobs:
 
       - name: 🔨 Construir y etiquetar imagen Docker
         run: |
-          VERSION=$(git rev-parse --short HEAD)
+          VERSION=$(git rev-parse --short HEAD || echo "latest")
           echo "VERSION=$VERSION"
           docker build -t rs-portal-web-react-remix:$VERSION .
           docker tag rs-portal-web-react-remix:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web-react-remix:$VERSION
