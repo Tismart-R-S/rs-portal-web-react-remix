@@ -35,6 +35,11 @@ jobs:
 
       - name: 📁 Verificar archivo descargado
         run: ls -la
+      
+      - name: 🔄 Instalar AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
 
       - name: 🔐 Autenticarse en Amazon ECR
         run: |
