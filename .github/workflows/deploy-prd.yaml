@@ -36,15 +36,18 @@ jobs:
       - name: 📁 Verificar archivo descargado
         run: ls -la
 
-      - name: 🐳 Iniciar sesión en Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: 🔐 Autenticarse en Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 919912553755.dkr.ecr.us-east-1.amazonaws.com
 
       - name: 🔨 Construir y etiquetar imagen Docker
         run: |
           VERSION=$(git rev-parse --short HEAD)
-          docker build -t reclutamiento/portal-web:$VERSION .
-          docker tag reclutamiento/portal-web:$VERSION reclutamiento/portal-web:latest
-          docker tag reclutamiento/portal-web:$VERSION reclutamiento/portal-web:prd
+          docker build -t rs:$VERSION .
+          docker tag rs:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs:prd
+          docker tag rs:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs:latest
 
-      - name: 📤 Subir imagen a Docker Hub
-        run: docker push reclutamiento/portal-web:prd
+      - name: 📤 Subir imagen a Amazon ECR
+        run: |
+          docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs:$VERSION
+          docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs:latest
