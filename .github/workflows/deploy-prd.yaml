@@ -55,9 +55,9 @@ jobs:
         run: |
           VERSION=$(git rev-parse --short HEAD || echo "latest")
           echo "VERSION=$VERSION"
-          docker build -t rs-portal-web-react-remix:$VERSION .
-          docker tag rs-portal-web-react-remix:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web-react-remix:latest
+          docker build -t rs-portal-web:$VERSION .
+          docker tag rs-portal-web:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
 
       - name: 📤 Subir imagen a Amazon ECR
         run: |
-          docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web-react-remix:latest
+          docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
