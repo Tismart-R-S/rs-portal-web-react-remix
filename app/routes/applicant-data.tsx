@@ -1,6 +1,5 @@
 import { ResumeSection } from "~/modules/profile/components";
-import { redirect, json, MetaFunction, data } from "@remix-run/node";
-import { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/cloudflare";
+import { redirect, json, MetaFunction, data,LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { makeDomainFunction } from "domain-functions";
 import { createFormAction } from "remix-forms";
 import { ApplicantDataForm } from "~/modules/applicant-data/components";
@@ -9,7 +8,6 @@ import { ApplicantDataLogic } from "~/modules/applicant-data/logic/applicant-dat
 import { useLoaderData } from "@remix-run/react";
 import { ApplicantDataFormValidationType } from "~/modules/applicant-data/types/applicant-data-form.type";
 import { SessionProvider } from "~/providers/session.provider";
-import { Context } from "~/shared/interface/global.interface";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,7 +18,7 @@ export const meta: MetaFunction = () => {
 
 const formAction = createFormAction({ redirect, json });
 
-export async function action({ request, context }: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   let cleanData: ApplicantDataFormValidationType;
 
   await formAction({
@@ -33,15 +31,15 @@ export async function action({ request, context }: ActionFunctionArgs) {
       return values;
     }),
     beforeSuccess: async () => {
-      await ApplicantDataLogic.save(request, cleanData, context as Context);
+      await ApplicantDataLogic.save(request, cleanData);
     },
   });
 
   return data({});
 }
 
-export async function loader({ request, context }: LoaderFunctionArgs) {
-  const applicantData = await ApplicantDataLogic.applicantData(request, context as Context);
+export async function loader({ request }: LoaderFunctionArgs) {
+  const applicantData = await ApplicantDataLogic.applicantData(request);
   const cookie = request.headers.get("cookie") || "";
   const { token } = await SessionProvider.get(cookie);
 

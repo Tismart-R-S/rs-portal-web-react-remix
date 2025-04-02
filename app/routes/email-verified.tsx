@@ -9,7 +9,6 @@ import { Form, useLoaderData } from "@remix-run/react";
 import EmailVerifiedLogic from "@modules/email-verified/logic/email-verified.logic";
 import { CenterContent } from "@shared/components";
 import { Button } from "@ui/button";
-import { Context } from "~/shared/interface/global.interface";
 
 export const meta: MetaFunction = () => {
   return [
@@ -54,24 +53,22 @@ export default function EmailVerified() {
   );
 }
 
-export async function loader({ request, context }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { isAuthenticated, email_token } =
     await EmailVerifiedLogic.verifyShowPage(request);
 
   if (email_token)
     await EmailVerifiedLogic.verifyEmailToken(
       request,
-      email_token,
-      context as Context
+      email_token
     );
 
   return data({ isAuthenticated });
 }
 
-export async function action({ request, context }: ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const response = await EmailVerifiedLogic.resendVerificationEmail(
-    request,
-    context as Context
+    request
   );
   return data(response);
 }

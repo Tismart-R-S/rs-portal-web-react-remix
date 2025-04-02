@@ -1,5 +1,4 @@
-import { redirect, json, data, MetaFunction } from "@remix-run/node";
-import { ActionFunctionArgs } from "@remix-run/cloudflare";
+import { redirect, json, data, MetaFunction, ActionFunctionArgs } from "@remix-run/node";
 import { makeDomainFunction } from "domain-functions";
 import { createFormAction } from "remix-forms";
 
@@ -8,7 +7,6 @@ import { LoginForm } from "@modules/login/components";
 import { LoginLogic } from "@modules/login/logic/login.logic";
 import { loginFormValidator } from "@modules/login/utils/login-form.validator";
 import { Card as CardShadcn, CardHeader, CardTitle } from "@ui/card";
-import { Context } from "~/shared/interface/global.interface";
 
 export const meta: MetaFunction = () => {
   return [
@@ -41,14 +39,13 @@ export default function Login() {
   );
 }
 
-export async function action({ request, context }: ActionFunctionArgs) {
-  console.log(context);
+export async function action({ request }: ActionFunctionArgs) {
   await formAction({
     request,
     schema: loginFormValidator,
     mutation,
     beforeSuccess: async () => {
-      await LoginLogic.login(request, context as Context);
+      await LoginLogic.login(request);
     },
   });
 

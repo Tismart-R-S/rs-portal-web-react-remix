@@ -1,4 +1,4 @@
-import { Facebook, Mail } from "lucide-react";
+//import { Facebook, Mail } from "lucide-react";
 import { Form } from "~/shared/components";
 
 import { Button } from "@ui/button";
@@ -62,14 +62,14 @@ const LoginForm = () => {
                 </span>
                 <hr className="w-3/4" />
               </div>
-              <div className="flex justify-between gap-3 w-full">
+              {/* <div className="flex justify-between gap-3 w-full">
                 <Button type="button" variant="outline" className="w-full">
                   <Mail /> Google
                 </Button>
                 <Button type="button" variant="outline" className="w-full">
                   <Facebook /> Facebook
                 </Button>
-              </div>
+              </div> */}
               <Button type="submit" className="w-full">
                 Ingresar
               </Button>
