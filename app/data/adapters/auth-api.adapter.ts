@@ -10,6 +10,8 @@ namespace AuthApiAdapter {
     data: LoginRequestModel
   ): Promise<BaseResponse<LoginResponseModel>> {
     const response = await AuthClient.post<LoginResponseModel>("/signin", data);
+    console.log("AuthApiAdapter.AuthClient.Uri:", AuthClient.getUri());
+    console.log("AuthApiAdapter.Response:", response);
 
     return { ok: true, statusCode: response.status, data: response.data };
   }

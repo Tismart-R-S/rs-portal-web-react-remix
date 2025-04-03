@@ -27,16 +27,12 @@ RUN npm install -g dotenv-cli
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/.env ./.env
 
 # Instalar solo dependencias de producción
 RUN npm install --omit=dev
 
 # Exponer el puerto de la aplicación
 EXPOSE 3000
-
-# Definir la variable de entorno para que Remix pueda leer el .env
-ENV DOTENV_CONFIG_PATH=/app/.env
 
 # Comando de inicio usando dotenv-cli
 CMD ["npm","start"]
