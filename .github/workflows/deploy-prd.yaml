@@ -51,17 +51,6 @@ jobs:
         run: |
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 919912553755.dkr.ecr.us-east-1.amazonaws.com
 
-      - name: 🔨 Construir y etiquetar imagen Docker
-        run: |
-          VERSION=$(git rev-parse --short HEAD || echo "latest")
-          echo "VERSION=$VERSION"
-          docker build -t rs-portal-web:$VERSION .
-          docker tag rs-portal-web:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
-
-      - name: 📤 Subir imagen a Amazon ECR
-        run: |
-          docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
-
       - name: 🔄 Actualizar variables de entorno en ECS
         run: |
           TASK_DEFINITION_ARN="arn:aws:ecs:us-east-1:919912553755:task-definition/RS:17"
@@ -74,9 +63,22 @@ jobs:
              '(.containerDefinitions[] | select(.name == "front-portal")).image = $image |
               (.containerDefinitions[] | select(.name == "front-portal")).environment = $env' \
              task-definition.json > $NEW_TASK_DEF
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > cleaned-task-definition.json
           NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://$NEW_TASK_DEF --query "taskDefinition.taskDefinitionArn" --output text)
           echo "Nueva definición de tarea registrada: $NEW_TASK_DEF_ARN"
           echo "TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> $GITHUB_ENV
+
+      - name: 🔨 Construir y etiquetar imagen Docker
+        run: |
+          VERSION=$(git rev-parse --short HEAD || echo "latest")
+          echo "VERSION=$VERSION"
+          docker build -t rs-portal-web:$VERSION .
+          docker tag rs-portal-web:$VERSION 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
+
+      - name: 📤 Subir imagen a Amazon ECR
+        run: |
+          docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
+
 
       - name: 🚀 Implementar nueva versión en ECS
         run: |
