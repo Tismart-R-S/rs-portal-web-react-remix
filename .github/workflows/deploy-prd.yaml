@@ -67,7 +67,7 @@ jobs:
           TASK_DEFINITION_ARN="arn:aws:ecs:us-east-1:919912553755:task-definition/RS:17"
           NEW_TASK_DEF="new-task-definition.json"
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION_ARN --query taskDefinition > task-definition.json
-          ENV_VARS=$(grep -v '^#' .env | grep -v '^$' | awk -F= '{gsub(/"/, "\\\"", $2); print "{\"name\":\""$1"\",\"value\":\""$2"\"}"}' | paste -sd, -)
+          ENV_VARS=$(grep -v '^#' .env | grep -v '^$' | awk -F= '{gsub(/"/, "\\\""); gsub(/\r/, ""); print "{\"name\":\""$1"\",\"value\":\""$2"\"}"}' | paste -sd, -)
           FAMILY=$(jq -r '.family' task-definition.json)
           jq --arg image "919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest" \
              --argjson env "[$ENV_VARS]" \
