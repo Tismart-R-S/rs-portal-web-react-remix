@@ -90,9 +90,32 @@ jobs:
         run: |
           docker push 919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest
 
-
       - name: 🚀 Implementar nueva versión en ECS
         run: |
           CLUSTER_NAME="RS"
           SERVICE_NAME="rs-recruitment-service"
           aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition "$TASK_DEF_ARN" --force-new-deployment
+        
+      #- name: 🗑️ Eliminar tareas antiguas en ECS
+        #run: |
+          #CLUSTER_NAME="RS"
+          #SERVICE_NAME="rs-recruitment-service"
+
+          #TASK_ARNS=$(aws ecs list-tasks --cluster $CLUSTER_NAME --service-name $SERVICE_NAME --query "taskArns[]" --output text)
+          #TASK_ARRAY=($TASK_ARNS)
+          #NUM_TASKS=${#TASK_ARRAY[@]}
+
+          #if [ "$NUM_TASKS" -gt 2 ]; then
+          #    TASKS_TO_DELETE=("${TASK_ARRAY[@]:0:$((NUM_TASKS - 2))}")
+
+          #    for TASK_ARN in "${TASKS_TO_DELETE[@]}"; do
+          #        # Obtener el ARN de la definición de tarea
+          #        TASK_DEFINITION_ARN=$(aws ecs describe-tasks --cluster $CLUSTER_NAME --tasks $TASK_ARN --query "tasks[0].taskDefinitionArn" --output text)
+
+          #        # Imprimir el ARN de la tarea y el ARN de la definición de tarea
+          #        echo "Eliminando tarea: $TASK_ARN, Task Definition ARN: $TASK_DEFINITION_ARN"
+          #        aws ecs stop-task --cluster $CLUSTER_NAME --task $TASK_ARN
+          #    done
+          #else
+          #    echo "No hay suficientes tareas para eliminar. Se requieren más de 2."
+          #fi

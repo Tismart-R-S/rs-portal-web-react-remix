@@ -55,13 +55,13 @@ const LoginForm = () => {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-5">
-              <div className="flex w-full items-center px-6">
+              {/* <div className="flex w-full items-center px-6">
                 <hr className="w-3/4" />
                 <span className="inline-block text-nowrap px-2 text-center text-sm text-zinc-400">
                   o continúa con
                 </span>
                 <hr className="w-3/4" />
-              </div>
+              </div> */}
               {/* <div className="flex justify-between gap-3 w-full">
                 <Button type="button" variant="outline" className="w-full">
                   <Mail /> Google
@@ -73,9 +73,9 @@ const LoginForm = () => {
               <Button type="submit" className="w-full">
                 Ingresar
               </Button>
-              <Button type="button" variant="link">
+              {/* <Button type="button" variant="link">
                 ¿Olvidaste tu contraseña?
-              </Button>
+              </Button> */}
             </CardFooter>
           </>
         );
