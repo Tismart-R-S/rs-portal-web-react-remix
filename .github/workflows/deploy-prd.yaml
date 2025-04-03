@@ -60,7 +60,9 @@ jobs:
           COMBINED_TASK_ARNS=$(echo $TASK_ARNS $TASK_ARNS_STOPPED | jq -s add)
 
           if [ $(echo $COMBINED_TASK_ARNS | jq '. | length') -gt 0 ]; then
-            LAST_TASK_ARN=$(echo $COMBINED_TASK_ARNS | jq -r 'sort_by(.) | last')
+            TASK_DETAILS=$(aws ecs describe-tasks --cluster RS --tasks $(echo $COMBINED_TASK_ARNS | jq -r '. | join(" ")') --query "tasks[].[taskArn, createdAt]" --output json)
+
+            LAST_TASK_ARN=$(echo $TASK_DETAILS | jq -r 'sort_by(.[1]) | last[0]')
           else
             echo "No hay tareas registradas."
             exit 1
@@ -86,6 +88,7 @@ jobs:
 
           NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://$NEW_TASK_DEF --query "taskDefinition.taskDefinitionArn" --output text)
 
+          echo: "Última tarea ejecutada: $TASK_DEFINITION_ARN"
           echo "Nueva definición de tarea registrada: $NEW_TASK_DEF_ARN"
 
           echo "TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> $GITHUB_ENV
