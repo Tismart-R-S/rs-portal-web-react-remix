@@ -88,9 +88,8 @@ jobs:
 
           NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://$NEW_TASK_DEF --query "taskDefinition.taskDefinitionArn" --output text)
 
-          echo: "Última tarea ejecutada: $TASK_DEFINITION_ARN"
+          echo "Última tarea ejecutada: $TASK_DEFINITION_ARN"
           echo "Nueva definición de tarea registrada: $NEW_TASK_DEF_ARN"
-
           echo "TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> $GITHUB_ENV
 
       - name: 🔨 Construir y etiquetar imagen Docker
