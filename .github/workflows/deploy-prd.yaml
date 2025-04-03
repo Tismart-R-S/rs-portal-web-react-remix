@@ -54,6 +54,10 @@ jobs:
       - name: 🔄 Actualizar variables de entorno en ECS
         run: |
           TASK_DEFINITION_ARN=$(aws ecs describe-tasks --cluster RS --tasks $TASK_ARN --query "tasks[0].taskDefinitionArn" --output text)
+          if [ -z "$TASK_ARN" ]; then
+            echo "No hay tareas en ejecución para el servicio rs-recruitment-service."
+            exit 1
+          fi
           NEW_TASK_DEF="new-task-definition.json"
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION_ARN --query taskDefinition > task-definition.json
           jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > cleaned-task-definition.json
