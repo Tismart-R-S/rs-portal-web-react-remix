@@ -20,9 +20,6 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Instalar dotenv-cli para manejar el archivo .env
-RUN npm install -g dotenv-cli
-
 # Copiar archivos esenciales desde la etapa de construcción
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/public ./public
