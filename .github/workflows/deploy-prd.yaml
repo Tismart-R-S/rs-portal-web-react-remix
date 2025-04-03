@@ -56,14 +56,14 @@ jobs:
           TASK_DEFINITION_ARN="arn:aws:ecs:us-east-1:919912553755:task-definition/RS:17"
           NEW_TASK_DEF="new-task-definition.json"
           aws ecs describe-task-definition --task-definition $TASK_DEFINITION_ARN --query taskDefinition > task-definition.json
-          ENV_VARS=$(grep -v '^#' .env | grep -v '^$' | awk -F= '{gsub(/"/, "\\\""); gsub(/\r/, ""); print "{\"name\":\""$1"\",\"value\":\""$2"\"}"}' | paste -sd, -)
-          FAMILY=$(jq -r '.family' task-definition.json)
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > cleaned-task-definition.json
+          ENV_VARS=$(cat .env | grep -v '^#' | grep -v '^$' | jq -Rn '[inputs | capture("(?<name>[^=]+)=(?<value>.*)") | {name: .name, value: .value}]')
+          FAMILY=$(jq -r '.family' cleaned-task-definition.json)
           jq --arg image "919912553755.dkr.ecr.us-east-1.amazonaws.com/rs-portal-web:latest" \
-             --argjson env "[$ENV_VARS]" \
+             --argjson env "$ENV_VARS" \
              '(.containerDefinitions[] | select(.name == "front-portal")).image = $image |
               (.containerDefinitions[] | select(.name == "front-portal")).environment = $env' \
-             task-definition.json > $NEW_TASK_DEF
-          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > cleaned-task-definition.json
+             cleaned-task-definition.json > $NEW_TASK_DEF
           NEW_TASK_DEF_ARN=$(aws ecs register-task-definition --cli-input-json file://$NEW_TASK_DEF --query "taskDefinition.taskDefinitionArn" --output text)
           echo "Nueva definición de tarea registrada: $NEW_TASK_DEF_ARN"
           echo "TASK_DEF_ARN=$NEW_TASK_DEF_ARN" >> $GITHUB_ENV
