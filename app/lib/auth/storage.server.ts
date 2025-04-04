@@ -13,7 +13,7 @@ const session = createCookieSessionStorage({
     secrets: [SECRET_KEY], // Clave secreta para firmar la cookie y garantizar su integridad.
     secure: isProduction, // Solo se enviará por HTTPS en producción.
     // maxAge: 60 * 60 * 24 * 30, // Duración de la cookie (30 dias).
-    maxAge: 60 * 60 * 3, // Duración de la cookie (3 horas).
+    maxAge: 60 * 60 * 24 * 7, // Duración de la cookie (7 dias).
   },
 });
 

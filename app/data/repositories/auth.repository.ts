@@ -14,7 +14,9 @@ namespace AuthRepository {
 
     try {
       response = await AuthApiAdapter.login(data);
+      console.log("AuthRepository:", response);
     } catch (error) {
+      console.log("AuthRepositoryError", error);
       response = RepositoryUtils.responseError(error);
     }
 
@@ -33,9 +35,7 @@ namespace AuthRepository {
     return response;
   }
 
-  export async function sendVerificationByEmail(
-    token: string
-  ) {
+  export async function sendVerificationByEmail(token: string) {
     let response: SendVerifByEmailResponse;
 
     try {
@@ -47,9 +47,7 @@ namespace AuthRepository {
     return response;
   }
 
-  export async function verifyEmailToken(
-    email_token: string
-  ) {
+  export async function verifyEmailToken(email_token: string) {
     let response: VerifyEmailTokenResponse;
 
     try {

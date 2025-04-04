@@ -6,12 +6,14 @@ import { UserLogic } from "@shared/logic/user.logic";
 
 export namespace LoginLogic {
   export const login = async (request: Request) => {
-    const login = await authenticator.authenticate(
-      StrategyKeys.auth,
-      request
-    );
+
+    console.log("LoginLogic.Reuest", request);
+
+    const login = await authenticator.authenticate(StrategyKeys.auth, request);
     const cookie = request.headers.get("cookie") || "";
     const path = new URL(request.url).pathname;
+
+    console.log("LoginLogic.Login", login);
 
     if (!login.ok) {
       const alert = {
@@ -24,6 +26,8 @@ export namespace LoginLogic {
 
     const access = login.data as LoginResponseModel;
     const user = await UserLogic.getDataCommonWay(access.accessToken);
+
+    console.log("LoginLogic.User", user);
 
     await SessionLogic.logIn(cookie, { ...access, user });
   };

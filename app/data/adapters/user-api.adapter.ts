@@ -15,6 +15,10 @@ namespace UserApiAdapter {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    console.log("UserApiAdapter.AuthClient.Uri", AuthClient.getUri());
+    console.log("UserApiAdapter.response", response);
+
     return { ok: true, statusCode: response.status, data: response.data };
   }
 
@@ -29,4 +33,3 @@ namespace UserApiAdapter {
 }
 
 export default UserApiAdapter;
-
