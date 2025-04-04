@@ -106,13 +106,13 @@ jobs:
       - name: 🚀 Implementar nueva versión en ECS
         run: |
           CLUSTER_NAME="RS"
-          SERVICE_NAME="rs-recruitment-service"
+          SERVICE_NAME="rs-recruitment-service-v2"
           aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition "$TASK_DEF_ARN" --force-new-deployment
         
       #- name: 🗑️ Eliminar tareas antiguas en ECS
         #run: |
           #CLUSTER_NAME="RS"
-          #SERVICE_NAME="rs-recruitment-service"
+          #SERVICE_NAME="rs-recruitment-service-v2"
 
           #TASK_ARNS=$(aws ecs list-tasks --cluster $CLUSTER_NAME --service-name $SERVICE_NAME --query "taskArns[]" --output text)
           #TASK_ARRAY=($TASK_ARNS)
