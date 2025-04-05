@@ -1,4 +1,4 @@
-import { AuthClient } from "@config/AuthClient";
+import AuthClient from "@config/AuthClient";
 import { UserResponseModel } from "../models/user.model";
 import { BaseResponse } from "../interfaces/global.interface";
 import {

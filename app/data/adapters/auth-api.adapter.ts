@@ -1,4 +1,4 @@
-import { AuthClient } from "@config/AuthClient";
+import AuthClient from "@config/AuthClient";
 import { LoginRequestModel, LoginResponseModel } from "../models/login.model";
 import { BaseResponse } from "../interfaces/global.interface";
 import { RefreshTokenResponseModel } from "../models/refresh-token.model";
@@ -9,8 +9,8 @@ namespace AuthApiAdapter {
   export async function login(
     data: LoginRequestModel
   ): Promise<BaseResponse<LoginResponseModel>> {
-    const response = await AuthClient.post<LoginResponseModel>("/signin", data);
     console.log("AuthApiAdapter.AuthClient.Uri:", AuthClient.getUri());
+    const response = await AuthClient.post<LoginResponseModel>("/signin", data);
     console.log("AuthApiAdapter.Response:", response);
 
     return { ok: true, statusCode: response.status, data: response.data };

@@ -76,7 +76,7 @@ jobs:
 
           jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-definition.json > cleaned-task-definition.json
 
-          ENV_VARS=$(cat .env | grep -v '^#' | grep -v '^$' | jq -Rn '[inputs | capture("(?<name>[^=]+)=(?<value>.*)") | {name: .name, value: .value}]')
+          ENV_VARS=$(cat .env | tr -d '\r' | grep -v '^#' | grep -v '^$' | jq -Rn '[inputs | capture("(?<name>[^=]+)=(?<value>.*)") | {name: .name, value: .value}]')
 
           FAMILY=$(jq -r '.family' cleaned-task-definition.json)
 
