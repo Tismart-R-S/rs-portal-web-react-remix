@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: 🔧 Actualizar AWS CLI a v2
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -o awscliv2.zip
+          sudo ./aws/install --update
+          aws --version
 
       - name: 🔄 Limpiar instalación previa
         run: |
@@ -53,9 +60,9 @@ jobs:
 
       - name: 🔄 Actualizar variables de entorno en ECS
         run: |
-          TASK_ARNS=$(aws ecs list-tasks --cluster RS --desired-status RUNNING --query "taskArns" --output json)
+          TASK_ARNS=$(aws ecs list-tasks --cluster RS --service-name rs-recruitment-service-v2 --desired-status RUNNING --query "taskArns" --output json)
 
-          TASK_ARNS_STOPPED=$(aws ecs list-tasks --cluster RS --desired-status STOPPED --query "taskArns" --output json)
+          TASK_ARNS_STOPPED=$(aws ecs list-tasks --cluster RS --service-name rs-recruitment-service-v2 --desired-status STOPPED --query "taskArns" --output json)
 
           COMBINED_TASK_ARNS=$(echo $TASK_ARNS $TASK_ARNS_STOPPED | jq -s add)
 
